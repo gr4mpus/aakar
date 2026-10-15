@@ -137,7 +137,7 @@ const jsonLd = [
           <span class="info__stock"><span class="dot"></span>{w.stock} spots left</span>
         </div>
         <h1 id="pdp-title" class="info__title">{w.title}</h1>
-        <svg class="brushline in" viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
+        <svg class="brushline" data-parallax viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
           <path pathLength="1" d="M2 6Q95 1 190 6T276 4"></path>
         </svg>
 
@@ -229,7 +229,7 @@ const jsonLd = [
             <h2 id={`st-${s.key}`}>
               <Icon name={s.icon} size={22} /> {s.title}
             </h2>
-            <svg class="brushline" viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
+            <svg class="brushline" data-parallax viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
               <path pathLength="1" d="M2 6Q95 1 190 6T276 4" />
             </svg>
             <ul data-stagger>
@@ -255,7 +255,7 @@ const jsonLd = [
       }
       <section class="story-card story-card--policy" data-reveal aria-labelledby="st-policy">
         <h2 id="st-policy"><Icon name="calendar" size={22} /> Refund & rescheduling policy</h2>
-        <svg class="brushline" viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
+        <svg class="brushline" data-parallax viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
           <path pathLength="1" d="M2 6Q95 1 190 6T276 4"></path>
         </svg>
         <ol class="policy" data-stagger>

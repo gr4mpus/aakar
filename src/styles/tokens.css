@@ -277,14 +277,16 @@ button {
   stroke-width: 3;
   stroke-linecap: round;
 }
+/* Scroll-scrubbed: hidden as it enters at the bottom (--py ≈ 0.5), fully drawn
+   by the middle of the screen, and un-draws again when scrolling back up. */
 .js .brushline path {
   stroke-dasharray: 1 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 0.9s var(--ease-out) 0.25s;
+  stroke-dashoffset: clamp(0px, calc((var(--py, 1) + 0.02) * 2px), 1px);
 }
-.js .in .brushline path,
-.js .brushline.in path {
-  stroke-dashoffset: 0;
+@media (prefers-reduced-motion: reduce) {
+  .js .brushline path {
+    stroke-dashoffset: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

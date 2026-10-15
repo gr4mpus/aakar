@@ -123,11 +123,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-@media (hover: hover) and (pointer: fine) {
-  .gallery__slide img {
-    transform: scale(1.12) translateY(calc(var(--py, 0) * -5%));
-  }
+  transform: scale(1.12) translateY(calc(var(--py, 0) * -5%));
 }
 .gallery__bar {
   position: absolute;
