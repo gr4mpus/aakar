@@ -1,0 +1,123 @@
+---
+import MiniMark from './MiniMark.astro';
+import Icon from './Icon.astro';
+---
+
+<header class="site-header">
+  <div class="site-header__bar">
+    <a class="brand" href="/" aria-label="Studio Akaar — home">
+      <MiniMark size={30} />
+      <span class="brand__word"><small>Studio</small>akaar</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/#workshops">Workshops</a>
+      <button class="cart-btn" type="button" data-cart-open aria-label="Open your bookings cart">
+        <Icon name="bag" size={20} />
+        <span class="cart-btn__count" data-cart-count hidden>0</span>
+      </button>
+    </nav>
+  </div>
+  <span class="site-header__progress" data-progress aria-hidden="true"></span>
+</header>
+
+<style is:global>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgb(250 243 235 / 0.94);
+    border-bottom: 1px solid rgb(169 53 24 / 0.12);
+  }
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1180px;
+    height: 60px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .brand .minimark {
+    transition: transform 0.6s var(--ease-spring);
+  }
+  .brand:hover .minimark {
+    transform: rotate(-8deg) scale(1.06);
+  }
+  .brand__word {
+    display: grid;
+    font: 600 1.45rem/0.8 var(--serif);
+    letter-spacing: 0.08em;
+  }
+  .brand__word small {
+    font: 600 0.5rem/1 var(--sans);
+    letter-spacing: 0.42em;
+    margin-bottom: 3px;
+  }
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .site-nav > a {
+    padding: 10px 12px;
+    font: 600 0.82rem/1 var(--sans);
+    text-decoration: none;
+    border-radius: 999px;
+  }
+  .site-nav > a:hover {
+    background: var(--sand);
+  }
+  .cart-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--terracotta);
+    color: var(--cream);
+    transition: transform 0.3s var(--ease-spring);
+  }
+  .cart-btn:active {
+    transform: scale(0.92);
+  }
+  .cart-btn.bump {
+    animation: cart-bump 0.6s var(--ease-spring);
+  }
+  @keyframes cart-bump {
+    30% {
+      transform: scale(1.18) rotate(-8deg);
+    }
+  }
+  .cart-btn__count {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--ochre);
+    color: var(--ink);
+    font: 800 0.68rem/20px var(--sans);
+    text-align: center;
+    box-shadow: 0 0 0 2px var(--cream);
+  }
+  .site-header__progress {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ochre), var(--terracotta), var(--olive));
+    transform-origin: 0 50%;
+    transform: scaleX(var(--p, 0));
+  }
+</style>

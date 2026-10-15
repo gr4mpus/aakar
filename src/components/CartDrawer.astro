@@ -1,0 +1,253 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+const { code, percent, minSubtotal } = site.coupon;
+---
+
+<dialog class="cart" data-cart aria-labelledby="cart-title">
+  <div class="cart__panel">
+    <header class="cart__head">
+      <div>
+        <p class="eyebrow">Your studio cart</p>
+        <h2 id="cart-title" class="cart__title">Booked slots</h2>
+      </div>
+      <button class="cart__close" type="button" data-cart-close aria-label="Close cart"><Icon name="x" /></button>
+    </header>
+
+    <div class="cart__body">
+      <ul class="cart__items" data-cart-items></ul>
+      <div class="cart__empty" data-cart-empty>
+        <Icon name="vase" size={44} />
+        <p>Your cart is as empty as an unthrown pot.</p>
+        <a class="btn btn--ghost" href="/#workshops" data-cart-close>Explore workshops</a>
+      </div>
+    </div>
+
+    <footer class="cart__foot" data-cart-foot hidden>
+      <form class="cart__coupon" data-coupon-form>
+        <label class="sr-only" for="coupon-input">Coupon code</label>
+        <input id="coupon-input" name="code" placeholder="Coupon code" autocomplete="off" autocapitalize="characters" />
+        <button class="btn btn--ghost" type="submit">Apply</button>
+      </form>
+      <p class="cart__hint" data-coupon-hint>
+        Use <b>{code}</b> for {percent}% off on orders above ₹{minSubtotal.toLocaleString('en-IN')}.
+      </p>
+      <dl class="cart__sums">
+        <div><dt>Subtotal</dt><dd data-sum-sub>₹0</dd></div>
+        <div class="cart__discount" data-sum-disc-row hidden><dt>{code} ({percent}% off)</dt><dd data-sum-disc>−₹0</dd></div>
+        <div class="cart__total"><dt>Total</dt><dd data-sum-total>₹0</dd></div>
+      </dl>
+      <a class="btn cart__checkout" data-cart-checkout href="#" target="_blank" rel="noopener">
+        <Icon name="whatsapp" /> Confirm booking on WhatsApp
+      </a>
+      <p class="cart__note">Online payments are launching soon. Until then, our team confirms your slot and payment over WhatsApp.</p>
+    </footer>
+  </div>
+</dialog>
+
+<style is:global>
+  .cart {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(420px, 100vw);
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    overflow: visible;
+  }
+  .cart::backdrop {
+    background: rgb(28 27 25 / 0.45);
+    opacity: 0;
+    transition: opacity 0.35s, overlay 0.35s allow-discrete, display 0.35s allow-discrete;
+  }
+  .cart[open]::backdrop {
+    opacity: 1;
+  }
+  @starting-style {
+    .cart[open]::backdrop {
+      opacity: 0;
+    }
+  }
+  .cart__panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--cream);
+    border-radius: 28px 0 0 28px;
+    box-shadow: -20px 0 50px -20px rgb(28 27 25 / 0.4);
+    transform: translateX(100%);
+    transition: transform 0.45s var(--ease-out);
+  }
+  .cart[open] .cart__panel {
+    transform: none;
+  }
+  @starting-style {
+    .cart[open] .cart__panel {
+      transform: translateX(100%);
+    }
+  }
+  .cart__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 22px 20px 14px;
+    border-bottom: 1px dashed rgb(169 53 24 / 0.25);
+  }
+  .cart__title {
+    margin: 6px 0 0;
+    font: 600 1.9rem/1 var(--serif);
+  }
+  .cart__close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--sand);
+  }
+  .cart__body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px 20px;
+  }
+  .cart__items {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cart-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--sand);
+    animation: cart-in 0.45s var(--ease-out);
+  }
+  @keyframes cart-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  .cart-item img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%;
+  }
+  .cart-item h3 {
+    margin: 0;
+    font: 600 1.1rem/1.15 var(--serif);
+  }
+  .cart-item p {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+  }
+  .cart-item b {
+    font-size: 0.85rem;
+    color: var(--terracotta);
+  }
+  .cart-item button {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--cream);
+  }
+  .cart__empty {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 40px 10px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+  .cart__empty .icon {
+    color: var(--terracotta);
+    stroke-width: 1.2;
+  }
+  .cart__empty[hidden] {
+    display: none;
+  }
+  .cart__foot {
+    padding: 16px 20px max(20px, env(safe-area-inset-bottom));
+    border-top: 1px dashed rgb(169 53 24 / 0.25);
+    background: var(--sand);
+    border-radius: 0 0 0 28px;
+  }
+  .cart__coupon {
+    display: flex;
+    gap: 8px;
+  }
+  .cart__coupon input {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    padding: 0 16px;
+    border: 1.5px dashed var(--terracotta);
+    border-radius: 999px;
+    background: var(--cream);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .cart__hint {
+    margin: 8px 4px 0;
+    font-size: 0.75rem;
+    color: var(--olive);
+  }
+  .cart__hint.ok {
+    color: var(--olive);
+    font-weight: 700;
+  }
+  .cart__sums {
+    margin: 14px 0;
+    display: grid;
+    gap: 6px;
+  }
+  .cart__sums div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+  .cart__sums dd {
+    margin: 0;
+    font-weight: 700;
+  }
+  .cart__discount {
+    color: var(--olive);
+  }
+  .cart__discount[hidden] {
+    display: none !important;
+  }
+  .cart__total {
+    padding-top: 8px;
+    border-top: 1px solid rgb(28 27 25 / 0.12);
+    font: 600 1.4rem/1.2 var(--serif) !important;
+  }
+  .cart__checkout {
+    width: 100%;
+    --bg: var(--olive);
+  }
+  .cart__note {
+    margin: 10px 4px 0;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,285 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/product.css';
+import Icon from '../../components/Icon.astro';
+import Stamp from '../../components/Workshop/Stamp.astro';
+import { workshops, categories, defaults, img, srcset, inr, type Workshop } from '../../data/workshops';
+import { site, schedule, refundPolicy, waLink } from '../../data/site';
+
+export function getStaticPaths() {
+  return workshops.map((w, i) => ({ params: { slug: w.slug }, props: { w, index: i } }));
+}
+interface Props {
+  w: Workshop;
+  index: number;
+}
+const { w, index } = Astro.props;
+const { code, percent, minSubtotal } = site.coupon;
+const off = Math.round((1 - w.price / w.mrp) * 100);
+
+const dates = schedule.dates.map((iso) => {
+  const d = new Date(`${iso}T00:00:00`);
+  return {
+    iso,
+    dow: d.toLocaleDateString('en-IN', { weekday: 'short' }),
+    day: d.getDate(),
+    mon: d.toLocaleDateString('en-IN', { month: 'short' }),
+  };
+});
+
+const story = [
+  { key: 'do', title: 'What you’ll do', icon: 'vase', items: w.whatYoullDo ?? w.tags },
+  { key: 'inc', title: 'What’s included', icon: 'sparkle', items: w.included ?? defaults.included },
+  ...(w.takeHome ? [{ key: 'home', title: 'Take-home details', icon: 'box', items: w.takeHome }] : []),
+  { key: 'for', title: 'Perfect for', icon: 'heart', items: w.perfectFor ?? defaults.perfectFor },
+];
+
+const url = `${site.url}/workshops/${w.slug}/`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `${w.title} Workshop`,
+    description: w.lead,
+    image: w.photos.map((p) => img(p, 1200, 900)),
+    brand: { '@type': 'Brand', name: site.name },
+    category: `${categories[w.category]} workshop`,
+    offers: {
+      '@type': 'Offer',
+      url,
+      priceCurrency: 'INR',
+      price: w.price,
+      availability: w.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Workshops', item: `${site.url}/#workshops` },
+      { '@type': 'ListItem', position: 2, name: w.title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={`${w.title} Workshop — ${w.duration.replace(' session', '')}, ${inr(w.price)} | Studio Akaar`}
+  description={`${w.lead} ${w.audience}. All materials included. Book your slot at Studio Akaar.`}
+  image={img(w.photos[0], 1200, 630)}
+  jsonLd={jsonLd}
+>
+  <main id="main" class="pdp" style={`--accent: var(--${w.accent})`}>
+    <nav class="pdp-back" aria-label="Breadcrumb">
+      <a href="/#workshops"><Icon name="back" size={18} /> Back to all workshops</a>
+    </nav>
+
+    <div class="pdp-switch" aria-label="Other workshops">
+      {
+        workshops.map((o) => (
+          <a href={`/workshops/${o.slug}/`} class:list={['pdp-switch__pill', { 'is-on': o.slug === w.slug }]} aria-current={o.slug === w.slug ? 'page' : undefined}>
+            {o.title.replace(/:.*/, '')}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="pdp-grid">
+      <!-- Gallery -->
+      <section class="gallery" aria-label={`${w.title} photos`} data-gallery data-parallax>
+        <div class="gallery__stage">
+          <span class="gallery__blob"></span>
+          <div class="gallery__frame" style={`view-transition-name: ws-${w.slug}`}>
+            <ul class="gallery__track" data-track tabindex="0" aria-live="polite">
+              {
+                w.photos.map((p, i) => (
+                  <li class="gallery__slide" data-caption={p.caption}>
+                    <img
+                      src={img(p, 900, 1100)}
+                      style={p.pos && `object-position:${p.pos}`}
+                      srcset={srcset(p, 1.22, [400, 600, 900, 1200])}
+                      sizes="(min-width: 960px) 520px, 100vw"
+                      width="900"
+                      height="1100"
+                      alt={`${w.title}: ${p.caption}`}
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      fetchpriority={i === 0 ? 'high' : undefined}
+                      decoding="async"
+                    />
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="gallery__bar">
+              <span class="gallery__caption" data-caption>{w.photos[0].caption}</span>
+              <span class="gallery__count"><b data-count>1</b>/{w.photos.length}</span>
+            </div>
+            <button class="gallery__nav gallery__nav--prev" type="button" data-prev aria-label="Previous photo"><Icon name="chev-l" /></button>
+            <button class="gallery__nav gallery__nav--next" type="button" data-next aria-label="Next photo"><Icon name="chev-r" /></button>
+          </div>
+          <Stamp id={`pdp-${w.slug}`} text="STUDIO AKAAR • HANDCRAFTED SESSION • " center={String(index + 1).padStart(2, '0')} class="gallery__stamp" />
+        </div>
+        <div class="gallery__thumbs" role="tablist" aria-label="Choose photo">
+          {
+            w.photos.map((p, i) => (
+              <button type="button" role="tab" class="gallery__thumb" data-thumb={i} aria-selected={i === 0 ? 'true' : 'false'} aria-label={`Photo ${i + 1}: ${p.caption}`}>
+                <img src={img(p, 160, 160)} style={p.pos && `object-position:${p.pos}`} width="80" height="80" alt="" loading="lazy" decoding="async" />
+              </button>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Info & booking -->
+      <section class="info" aria-labelledby="pdp-title">
+        <div class="info__meta">
+          <span class="ws-cat">{categories[w.category]} workshop</span>
+          <span class="info__stock"><span class="dot"></span>{w.stock} spots left</span>
+        </div>
+        <h1 id="pdp-title" class="info__title">{w.title}</h1>
+        <svg class="brushline in" viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
+          <path pathLength="1" d="M2 6Q95 1 190 6T276 4"></path>
+        </svg>
+
+        <div class="info__price">
+          <strong>{inr(w.price)}</strong>
+          <del>{inr(w.mrp)}</del>
+          <span class="info__off">{off}% off</span>
+          <small>per person</small>
+        </div>
+
+        <div class="ticket">
+          <svg class="ticket__edge" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0H10V4A4 4 0 0 0 10 12V20A4 4 0 0 0 10 28V36A4 4 0 0 0 10 44V52A4 4 0 0 0 10 60V68A4 4 0 0 0 10 76V84A4 4 0 0 0 10 92V100H0Z"></path></svg>
+          <div class="ticket__body">
+            <p class="ticket__label">Coupon</p>
+            <p class="ticket__text">Use <b>{code}</b> for {percent}% off on order value above ₹{minSubtotal.toLocaleString('en-IN')}</p>
+          </div>
+          <button class="ticket__btn" type="button" data-copy={code}>
+            <Icon name="copy" size={16} /><span data-copy-label>Copy {code}</span>
+          </button>
+        </div>
+
+        <p class="info__lead">{w.lead}</p>
+
+        <ul class="info__pills">
+          <li><Icon name="clock" size={18} /> {w.duration}</li>
+          <li><Icon name="users" size={18} /> {w.audience}</li>
+          <li><Icon name="jar" size={18} /> All materials included</li>
+        </ul>
+
+        <form class="book" id="book" data-book data-slug={w.slug} data-title={w.title} data-price={w.price} data-stock={w.stock} data-photo={img(w.photos[0], 160, 160)}>
+          <fieldset class="book__set">
+            <legend><span>Select date</span><output data-date-out></output></legend>
+            <div class="book__dates">
+              {
+                dates.map((d, i) => (
+                  <label class="date-pill">
+                    <input type="radio" name="date" value={d.iso} checked={i === 0} />
+                    <span>
+                      <small>{d.dow}</small>
+                      <b>{d.day}</b>
+                      <small>{d.mon}</small>
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset class="book__set">
+            <legend><span>Select time</span><output data-time-out></output></legend>
+            <div class="book__times">
+              {
+                schedule.times.map((t, i) => (
+                  <label class="time-pill">
+                    <input type="radio" name="time" value={t} checked={i === 0} />
+                    <span>{t}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="book__row">
+            <div class="stepper" role="group" aria-label="Number of participants">
+              <button type="button" data-qty="-1" aria-label="Fewer participants"><Icon name="minus" size={18} /></button>
+              <output data-qty-out aria-live="polite">1</output>
+              <button type="button" data-qty="1" aria-label="More participants"><Icon name="plus" size={18} /></button>
+            </div>
+            <span class="book__stock">{w.stock} in stock</span>
+            <span class="book__sub"><small>Subtotal</small><b data-subtotal>{inr(w.price)}</b></span>
+          </div>
+
+          <div class="book__ctas">
+            <button class="btn" type="submit"><Icon name="bag" /> Add to cart</button>
+            <a class="btn btn--ghost" data-wa href={waLink(`Hi Studio Akaar! I’d like to book ${w.title}.`)} target="_blank" rel="noopener">
+              <Icon name="whatsapp" /> Chat on WhatsApp
+            </a>
+          </div>
+          <p class="book__note" data-book-note hidden></p>
+        </form>
+      </section>
+    </div>
+
+    <!-- Story & policy cards -->
+    <div class="story">
+      {
+        story.map((s, i) => (
+          <section class={`story-card story-card--${s.key}`} data-reveal style={`--d:${(i % 2) * 110}`} aria-labelledby={`st-${s.key}`}>
+            <h2 id={`st-${s.key}`}>
+              <Icon name={s.icon} size={22} /> {s.title}
+            </h2>
+            <svg class="brushline" viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
+              <path pathLength="1" d="M2 6Q95 1 190 6T276 4" />
+            </svg>
+            <ul data-stagger>
+              {s.items.map((it) => (
+                <li>
+                  <Icon name={s.icon} size={15} />
+                  {it}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+      {
+        w.optional && (
+          <section class="story-card story-card--opt" data-reveal aria-labelledby="st-opt">
+            <h2 id="st-opt">
+              <Icon name="sparkle" size={22} /> Optional
+            </h2>
+            <p>{w.optional}</p>
+          </section>
+        )
+      }
+      <section class="story-card story-card--policy" data-reveal aria-labelledby="st-policy">
+        <h2 id="st-policy"><Icon name="calendar" size={22} /> Refund & rescheduling policy</h2>
+        <svg class="brushline" viewBox="0 0 280 10" preserveAspectRatio="none" aria-hidden="true">
+          <path pathLength="1" d="M2 6Q95 1 190 6T276 4"></path>
+        </svg>
+        <ol class="policy" data-stagger>
+          {
+            refundPolicy.tiers.map((t, i) => (
+              <li class={`policy__tier policy__tier--${i}`}>
+                <span>{t.when}</span>
+                <b>{t.what}</b>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="policy__note"><Icon name="sparkle" size={15} /> {refundPolicy.note}</p>
+      </section>
+    </div>
+
+    <!-- Mobile sticky booking bar -->
+    <div class="dock" data-dock aria-hidden="true">
+      <span class="dock__price"><small>{w.title}</small><b>{inr(w.price)}</b></span>
+      <a class="btn" href="#book" tabindex="-1">Book a slot</a>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import '../../scripts/product';
+</script>

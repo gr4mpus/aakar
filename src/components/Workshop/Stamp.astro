@@ -1,0 +1,52 @@
+---
+// Circular studio stamp; rotates with the parent's --py scroll variable.
+interface Props {
+  id: string;
+  text: string;
+  center: string;
+  class?: string;
+}
+const { id, text, center, class: className } = Astro.props;
+---
+
+<span class:list={['stamp', className]} aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <defs><path id={`st-${id}`} d="M50 50m-35 0a35 35 0 1 1 70 0a35 35 0 1 1-70 0"></path></defs>
+    <circle cx="50" cy="50" r="46" class="stamp__ring"></circle>
+    <text><textPath href={`#st-${id}`} textLength="218">{text}</textPath></text>
+  </svg>
+  <b>{center}</b>
+</span>
+
+<style is:global>
+  .stamp {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+  }
+  .stamp svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(calc(var(--py, 0) * 160deg));
+  }
+  .stamp__ring {
+    fill: var(--cream);
+    stroke: var(--terracotta);
+    stroke-width: 1.6;
+    stroke-dasharray: 4 3;
+  }
+  .stamp text {
+    fill: var(--terracotta);
+    font: 700 7.6px var(--sans);
+    letter-spacing: 0.08em;
+  }
+  .stamp b {
+    position: relative;
+    font: 600 1.35rem/1 var(--serif);
+    color: var(--ink);
+  }
+</style>

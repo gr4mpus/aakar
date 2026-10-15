@@ -1,0 +1,294 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero/Hero.astro';
+import WorkshopCard from '../components/Workshop/WorkshopCard.astro';
+import Promises from '../components/Promises.astro';
+import { workshops, categories, img, type Category } from '../data/workshops';
+import { site } from '../data/site';
+
+const counts = workshops.reduce<Record<string, number>>((m, w) => ((m[w.category] = (m[w.category] || 0) + 1), m), {});
+const marquee = workshops.map((w) => w.title.replace(/:.*/, ''));
+
+const description =
+  'Hands-on pottery, sculpture and painting workshops at Studio Akaar — wheel pottery, canvas painting, kintsugi, resin jewellery and more. Beginner-friendly, all materials included. Book your slot.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ArtsAndCraftsStore',
+    name: site.name,
+    slogan: site.tagline,
+    url: site.url,
+    logo: `${site.url}/favicon.svg`,
+    description,
+    priceRange: '₹750–₹1300',
+    currenciesAccepted: 'INR',
+    ...(site.instagram ? { sameAs: [site.instagram] } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Studio Akaar workshops',
+    itemListElement: workshops.map((w, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${site.url}/workshops/${w.slug}/`,
+      name: w.title,
+    })),
+  },
+];
+---
+
+<Base
+  title="Studio Akaar — Pottery, Sculpture & Painting Workshops | Bookings Open"
+  description={description}
+  image={img(workshops[0].photos[0], 1200, 630)}
+  jsonLd={jsonLd}
+>
+  <script is:inline>
+    // Legacy hash links (#workshop/slug) → real workshop pages.
+    (function (m) {
+      if (m) location.replace('/workshops/' + m[1] + '/');
+    })(location.hash.match(/^#workshop\/([\w-]+)/));
+  </script>
+
+  <main id="main">
+    <Hero />
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        {[0, 1].map(() => marquee.map((t) => <span>{t}<i>✦</i></span>))}
+      </div>
+    </div>
+
+    <section id="workshops" class="workshops" aria-labelledby="ws-heading">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow">{workshops.length} hands-on workshops</p>
+        <h2 id="ws-heading" class="h2">Pick your medium, <em>make it yours.</em></h2>
+        <p class="section-head__sub">Every session is guided, beginner-friendly and comes with all materials. Tap a workshop to see slots.</p>
+      </header>
+
+      <div class="filters" role="group" aria-label="Filter workshops">
+        <button type="button" class="filter is-on" data-filter="all" aria-pressed="true">All <sup>{workshops.length}</sup></button>
+        {
+          (Object.keys(categories) as Category[]).map((c) => (
+            <button type="button" class="filter" data-filter={c} aria-pressed="false">
+              {categories[c]} <sup>{counts[c]}</sup>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="ws-grid">
+        {workshops.map((w, i) => <WorkshopCard w={w} index={i} />)}
+      </div>
+    </section>
+
+    <section class="steps" aria-labelledby="steps-heading">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow">How it works</p>
+        <h2 id="steps-heading" class="h2">From lump of clay <em>to keepsake.</em></h2>
+      </header>
+      <ol class="steps__list">
+        <li data-reveal style="--d:0"><b>01</b><h3>Choose your medium</h3><p>Clay, canvas, resin or sparkle — pick what calls to you.</p></li>
+        <li data-reveal style="--d:120"><b>02</b><h3>Book a slot</h3><p>Choose a date and time, add friends, and confirm in a tap.</p></li>
+        <li data-reveal style="--d:240"><b>03</b><h3>Create & take it home</h3><p>Arrive, get guided by our artists, and leave with your own piece.</p></li>
+      </ol>
+    </section>
+
+    <Promises />
+  </main>
+</Base>
+
+<script>
+  // Category filter — cards fade back in on change.
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('.ws-card');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      buttons.forEach((b) => {
+        b.classList.toggle('is-on', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      cards.forEach((c) => {
+        const show = f === 'all' || c.dataset.cat === f;
+        c.hidden = !show;
+        if (show) {
+          c.classList.remove('refilter');
+          void c.offsetWidth;
+          c.classList.add('refilter', 'in');
+        }
+      });
+    }),
+  );
+</script>
+
+<style is:global>
+  /* Marquee band */
+  .marquee {
+    position: relative;
+    margin: 10px -4px 0;
+    padding: 12px 0;
+    background: var(--ochre);
+    color: var(--ink);
+    transform: rotate(-2deg);
+    overflow: hidden;
+    box-shadow: 0 10px 30px -18px rgb(169 53 24 / 0.6);
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 48s linear infinite;
+  }
+  .marquee span {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding-right: 18px;
+    font: 600 1.35rem/1 var(--serif);
+    white-space: nowrap;
+  }
+  .marquee i {
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--terracotta);
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Section heads */
+  .section-head {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    text-align: center;
+  }
+  .section-head .eyebrow::after {
+    content: '';
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+  }
+  .section-head__sub {
+    margin: 12px auto 0;
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  /* Workshops */
+  .workshops {
+    padding-top: 84px;
+  }
+  .filters {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 26px auto 30px;
+    padding: 4px var(--gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter {
+    flex: none;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1.5px solid rgb(169 53 24 / 0.25);
+    border-radius: 999px;
+    background: var(--cream);
+    font: 700 0.82rem/1 var(--sans);
+    transition:
+      background 0.3s,
+      color 0.3s,
+      border-color 0.3s;
+  }
+  .filter sup {
+    font-size: 0.62rem;
+    opacity: 0.7;
+  }
+  .filter.is-on {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: var(--cream);
+  }
+  .ws-grid {
+    display: grid;
+    gap: 22px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  .ws-card[hidden] {
+    display: none;
+  }
+  .ws-card.refilter {
+    animation: refilter 0.6s var(--ease-out);
+  }
+  @keyframes refilter {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+  @container (min-width: 760px) {
+    .ws-grid {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 34px;
+      row-gap: 40px;
+      padding-bottom: 80px;
+    }
+    /* Staggered editorial grid */
+    .ws-grid > .ws-card:nth-child(even) {
+      translate: 0 84px;
+    }
+  }
+
+  /* Steps */
+  .steps {
+    padding-top: 96px;
+  }
+  .steps__list {
+    display: grid;
+    gap: 14px;
+    max-width: 1000px;
+    margin: 34px auto 0;
+    padding: 0 var(--gutter);
+    list-style: none;
+    counter-reset: s;
+  }
+  .steps__list li {
+    position: relative;
+    padding: 22px 22px 22px 86px;
+    border-radius: var(--radius);
+    background: var(--cream);
+    border: 1px solid rgb(169 53 24 / 0.14);
+  }
+  .steps__list b {
+    position: absolute;
+    left: 20px;
+    top: 16px;
+    font: 600 2.8rem/1 var(--serif);
+    color: var(--ochre);
+  }
+  .steps__list h3 {
+    margin: 0;
+    font: 600 1.45rem/1.1 var(--serif);
+  }
+  .steps__list p {
+    margin: 6px 0 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  @container (min-width: 760px) {
+    .steps__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .steps__list li {
+      padding: 74px 22px 24px;
+    }
+  }
+</style>

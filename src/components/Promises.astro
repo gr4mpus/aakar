@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+import { promises } from '../data/site';
+const tones = ['clay', 'olive', 'peach'];
+---
+
+<section class="promises" aria-label="Every Studio Akaar workshop includes">
+  <ul class="promises__box" data-reveal>
+    {
+      promises.map((p, i) => (
+        <li class="promise">
+          <span class={`promise__icon tone-${tones[i]}`}>
+            <Icon name={p.icon === 'leaf' ? 'sprig' : p.icon} size={28} />
+          </span>
+          <span class="promise__text">{p.text}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style is:global>
+  .promises {
+    max-width: 920px;
+    margin: 72px auto 0;
+    padding: 0 var(--gutter);
+    container-type: inline-size;
+  }
+  .promises__box {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 6px 20px;
+    list-style: none;
+    border-radius: 30px;
+    background: var(--sand);
+    box-shadow: inset 0 0 0 1px rgb(169 53 24 / 0.12);
+  }
+  /* Mobile / IG: horizontal rows with dotted dividers — no narrow-column collisions */
+  .promise {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 16px 0;
+    text-align: left;
+    border-bottom: 2px dotted rgb(169 53 24 / 0.3);
+  }
+  .promise:last-child {
+    border-bottom: 0;
+  }
+  .promise__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    transition: transform 0.6s var(--ease-spring);
+  }
+  .promise:hover .promise__icon {
+    transform: rotate(-10deg) scale(1.06);
+  }
+  .tone-clay {
+    background: #f1d9c5;
+    color: var(--terracotta);
+  }
+  .tone-olive {
+    background: var(--olive);
+    color: var(--cream);
+  }
+  .tone-peach {
+    background: #f3c9ad;
+    color: var(--terracotta);
+  }
+  .promise__text {
+    font: 800 0.78rem/1.35 var(--sans);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  /* Desktop: classic three-column badges with vertical dotted dividers */
+  @container (min-width: 641px) {
+    .promises__box {
+      flex-direction: row;
+      padding: 22px 10px;
+    }
+    .promise {
+      flex: 1;
+      flex-direction: column;
+      gap: 12px;
+      padding: 6px 20px;
+      text-align: center;
+      border-bottom: 0;
+      border-right: 2px dotted rgb(169 53 24 / 0.3);
+    }
+    .promise:last-child {
+      border-right: 0;
+    }
+  }
+</style>

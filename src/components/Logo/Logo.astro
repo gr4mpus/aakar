@@ -1,0 +1,117 @@
+---
+/**
+ * Studio Akaar animated logo — inline SVG, no fonts, no images, ~1KB of JS.
+ * Wrap it in a link at the call site if it should navigate.
+ */
+import './logo.css';
+import { studio, akaar, tagline, type Line } from './glyphs';
+
+interface Props {
+  /** Unique per page if the logo is rendered more than once (SVG ids must not clash). */
+  id?: string;
+  class?: string;
+  /** Hide the wordmark and render only the emblem (e.g. favicon-sized header). */
+  emblemOnly?: boolean;
+}
+const { id = 'ak', class: className, emblemOnly = false } = Astro.props;
+
+const lines: [string, Line][] = [
+  ['1', studio],
+  ['2', akaar],
+  ['3', tagline],
+];
+const gid = (line: string, ch: string) => `${id}${line}${ch}`;
+const viewH = emblemOnly ? 226 : 395;
+---
+
+<svg
+  class:list={['akaar-logo', className]}
+  data-akaar-logo
+  viewBox={`0 0 500 ${viewH}`}
+  width="500"
+  height={viewH}
+  role="img"
+  aria-labelledby={`${id}-t`}
+>
+  <title id={`${id}-t`}>Studio Akaar — Create · Connect · Express</title>
+  <defs>
+    <clipPath id={`${id}-pc`}><rect class="lg-rise" x="206" y="108" width="94" height="120"></rect></clipPath>
+    <clipPath id={`${id}-sc`}><use href={`#${id}-pb`}></use></clipPath>
+    <mask id={`${id}-bm`}><path class="lg-sweep" pathLength="1" d="M232 214C252 194 268 180 300 176"></path></mask>
+    {
+      !emblemOnly &&
+        lines.map(([key, line]) => (
+          <>
+            <clipPath id={`${id}${key}c`}>
+              <rect y={line.box.y} width="500" height={line.box.h} />
+            </clipPath>
+            {Object.entries(line.glyphs).map(([ch, d]) => (
+              <path id={gid(key, ch)} d={d} />
+            ))}
+          </>
+        ))
+    }
+  </defs>
+
+  <g class="lg-emblem">
+    <g class="lg-par lg-par-blob">
+      <path
+        class="lg-blob"
+        d="M186 18C201 17 218 26 234 36C256 48 274 63 279 80C283 95 277 113 268 127C256 150 234 180 216 193C201 199 178 201 166 195C154 188 145 170 144 150C143 130 152 113 159 100C165 89 169 80 168 70C167 60 160 49 160 39C160 28 172 19 186 18Z"
+      ></path>
+    </g>
+    <g class="lg-par lg-par-cres">
+      <path
+        class="lg-cres"
+        d="M225 16C234 7 256 1 274 2C308 3 340 27 351 60C361 90 354 125 334 147C324 157 313 165 302 168C297 166 297 160 298 155C304 135 313 110 311 90C309 67 296 51 278 40C261 29 242 22 225 16Z"
+      ></path>
+    </g>
+    <g class="lg-par lg-par-pot">
+      <g clip-path={`url(#${id}-pc)`}>
+        <g class="lg-pot">
+          <path
+            id={`${id}-pb`}
+            class="lg-pot-body"
+            d="M234 113H265C269 113 272 115 271 118C270 121 267 122 265 124C264 128 264 133 266 137C278 142 287 153 287 173C287 193 278 210 268 221C262 224 237 224 231 221C221 210 211 193 211 173C211 153 220 142 233 137C235 133 235 128 234 124C232 122 229 121 228 118C227 115 230 113 234 113Z"
+          ></path>
+          <!-- Dry-brush slip flick: solid swoosh + bristle trails, clipped to the pot
+               and painted on by one masked sweep. -->
+          <g clip-path={`url(#${id}-sc)`}>
+            <g class="lg-brush" mask={`url(#${id}-bm)`}>
+              <path d="M241 195C254 183 270 174 293 167L293 184C273 183 256 189 241 195Z"></path>
+              <path class="lg-grain" d="M253 187C261 182 269 179 278 177"></path>
+              <path class="lg-bristle" stroke-width="1.5" d="M249 181C259 173 271 167 291 162"></path>
+              <path class="lg-bristle" stroke-width="2.6" d="M238 204C251 194 268 189 291 188"></path>
+              <path class="lg-bristle" stroke-width="2.1" d="M245 208C257 199 272 195 291 194"></path>
+              <path class="lg-bristle" stroke-width="1.6" d="M252 211C263 204 275 201 289 200"></path>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  {
+    !emblemOnly && (
+      <g class="lg-type">
+        {lines.map(([key, line]) => (
+          <g clip-path={`url(#${id}${key}c)`}>
+            <g class={`lg-line lg-l${key}`}>
+              {line.uses.map(([ch, x]) => (
+                <use href={`#${gid(key, ch)}`} x={x} />
+              ))}
+            </g>
+          </g>
+        ))}
+        {tagline.dots.map((d) => (
+          <circle class="lg-dot" cx={d.cx} cy={d.cy} r={d.r} />
+        ))}
+      </g>
+    )
+  }
+</svg>
+
+<script>
+  import { initLogos } from './logo';
+  initLogos();
+</script>

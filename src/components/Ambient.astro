@@ -1,0 +1,163 @@
+---
+// Page-wide ambient art: a terracotta thread that draws itself with scroll,
+// and olive branches that bloom in the margins as they enter the viewport.
+const branches = Array.from({ length: 12 }, (_, i) => {
+  const left = i % 2 === 0;
+  return {
+    left,
+    top: 4 + i * 8 + (i % 3) * 1.5, // % of page height
+    size: 74 + ((i * 37) % 46), // px
+    tilt: (left ? 1 : -1) * (14 + ((i * 11) % 22)),
+    flip: left ? 1 : -1,
+  };
+});
+---
+
+<div class="ambient" aria-hidden="true">
+  <svg class="thread" viewBox="0 0 100 1000" preserveAspectRatio="none">
+    <path
+      pathLength="1"
+      d="M50,0 C68,180 32,360 54,540 C72,720 30,860 50,1000"></path>
+  </svg>
+  <!-- Mobile: a fine clay thread in the right gutter, with a bead at its tip. -->
+  <div class="rail" data-progress>
+    <span class="rail__fill"></span>
+    <span class="rail__bead"></span>
+  </div>
+  <div class="branches">
+    {
+      branches.map((b) => (
+        <span
+          class="branch"
+          data-reveal
+          style={`top:${b.top}%;${b.left ? 'left' : 'right'}:-18px;--s:${b.size}px;--tilt:${b.tilt}deg;--flip:${b.flip}`}
+        >
+          <svg viewBox="0 0 80 160">
+            <use href="#i-branch" />
+          </svg>
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style is:global>
+  .ambient {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: clip;
+  }
+  .thread {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+  .thread path {
+    fill: none;
+    stroke: var(--terracotta);
+    stroke-width: 1.4;
+    opacity: 0.24;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: calc(1px - var(--p, 0) * 1px);
+  }
+  .branches {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ----- Mobile scroll rail (the centre thread hides behind cards on phones) ----- */
+  .rail {
+    --rail-h: calc(100svh - 104px);
+    position: fixed;
+    top: 80px;
+    right: 3px;
+    z-index: 25;
+    width: 9px;
+    height: var(--rail-h);
+    /* Invisible at the very top so the hero stays clean; eases in on scroll. */
+    opacity: min(0.85, calc(var(--p, 0) * 30));
+    transition: opacity 0.4s;
+  }
+  .rail::before {
+    /* dotted guide */
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: repeating-linear-gradient(to bottom, rgb(169 53 24 / 0.35) 0 2px, transparent 2px 7px);
+  }
+  .rail__fill {
+    position: absolute;
+    left: 3.5px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(var(--ochre), var(--terracotta));
+    transform-origin: 50% 0;
+    transform: scaleY(var(--p, 0));
+  }
+  .rail__bead {
+    position: absolute;
+    left: 0;
+    top: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ochre);
+    box-shadow:
+      0 0 0 2px var(--cream),
+      0 0 0 3px var(--terracotta);
+    transform: translateY(calc(var(--p, 0) * var(--rail-h)));
+  }
+  @media (min-width: 760px) {
+    .rail {
+      display: none;
+    }
+  }
+  @media (max-width: 759px) {
+    .thread {
+      display: none;
+    }
+  }
+  .branch {
+    position: absolute;
+    width: var(--s);
+    color: var(--olive);
+    opacity: 0.15;
+    transform: scaleX(var(--flip)) rotate(var(--tilt));
+  }
+  .branch svg {
+    width: 100%;
+    height: auto;
+    transform-origin: 50% 100%;
+    transition: transform 1.6s var(--ease-out);
+  }
+  /* Bloom: the branch, not its wrapper, so the reveal opacity stays subtle. */
+  .js .branch[data-reveal] {
+    opacity: 0;
+    transform: scaleX(var(--flip)) rotate(var(--tilt));
+    transition: opacity 1.2s var(--ease-out);
+  }
+  .js .branch[data-reveal] svg {
+    transform: scale(0.28) rotate(-18deg);
+  }
+  .js .branch[data-reveal].in {
+    opacity: 0.15;
+  }
+  .js .branch[data-reveal].in svg {
+    transform: none;
+  }
+  @media (min-width: 900px) {
+    .branch {
+      --s: 120px !important;
+    }
+  }
+</style>

@@ -1,0 +1,249 @@
+---
+import Logo from '../Logo/Logo.astro';
+import HandNote from './HandNote.astro';
+import Icon from '../Icon.astro';
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <!-- Corner art: terracotta dry-brush wash (TL) and olive branch (TR) -->
+  <svg class="hero__wash" viewBox="0 0 220 170" aria-hidden="true">
+    <path pathLength="1" style="--i:0" stroke-width="40" d="M-20 46C40 24 104 10 190-12"></path>
+    <path pathLength="1" style="--i:1" stroke-width="22" d="M-20 90C30 70 80 54 140 28"></path>
+    <path pathLength="1" style="--i:2" stroke-width="9" d="M-14 120C14 106 44 96 82 80"></path>
+    <path pathLength="1" style="--i:3" stroke-width="2" d="M-10 70C50 46 120 26 200 4M-12 100C40 80 92 64 150 44"></path>
+  </svg>
+  <svg class="hero__branch" viewBox="0 0 80 160" aria-hidden="true"><use href="#i-branch"></use></svg>
+  <span class="hero__dots" aria-hidden="true"></span>
+
+  <div class="hero__mark">
+    <div class="hero__logo"><Logo id="hl" /></div>
+    <div class="hero__note hero-fade"><HandNote /></div>
+  </div>
+
+  <!-- Everything below the logo arrives together in one soft fade. -->
+  <div class="hero__copy hero-fade">
+  <h1 id="hero-title" class="hero__title">
+    <span class="sr-only">Studio Akaar — pottery, sculpture and painting workshops. </span>
+    <span class="hero__display">Bookings<br />open</span>
+  </h1>
+
+  <div class="hero__rule" aria-hidden="true"><span></span></div>
+
+  <a class="brush-banner" href="#workshops">
+    <svg class="brush-banner__paint" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M8 13C44 6 120 9 200 6C242 4 278 7 294 11L290 19L298 26L289 33L296 43C258 53 160 49 92 53C52 55 22 52 5 48L11 40L2 31L10 23Z"></path>
+      <path class="streak" d="M14 9C80 5 170 6 280 4M20 51C90 55 180 50 270 52M2 16L-6 15M296 38L306 39"></path>
+    </svg>
+    <span class="brush-banner__text">Explore Our Workshops <Icon name="arrow" size={18} /></span>
+  </a>
+
+  <p class="hero__slot">
+    <Icon name="calendar" size={26} />
+    <span>Book your favourite slot today</span>
+    <Icon name="sprig" size={22} class="hero__sprig" />
+  </p>
+  </div>
+</section>
+
+<style is:global>
+  .hero {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    padding: 28px var(--gutter) 48px;
+    text-align: center;
+    overflow: clip;
+  }
+  .hero__wash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: clamp(120px, 34cqw, 300px);
+    opacity: 0.38;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .hero__wash path {
+    fill: none;
+    stroke: var(--terracotta-soft);
+    stroke-linecap: round;
+  }
+  .hero__wash,
+  .hero__branch {
+    animation: hero-soft 1.2s ease-out 0.2s both;
+  }
+  @keyframes hero-soft {
+    from {
+      opacity: 0;
+    }
+  }
+  .hero__branch {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    width: clamp(70px, 18cqw, 150px);
+    color: var(--olive);
+    opacity: 0.38;
+    transform: rotate(-150deg) scaleX(-1);
+    transform-origin: 50% 50%;
+    pointer-events: none;
+  }
+  .hero__dots {
+    position: absolute;
+    top: 34%;
+    left: 6%;
+    width: 40px;
+    height: 54px;
+    background: radial-gradient(circle, var(--ink) 1.7px, transparent 2.2px) 0 0 / 13px 13px;
+    opacity: 0.55;
+  }
+
+  /* Logo + handwritten note */
+  .hero__mark {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    width: 100%;
+  }
+  .hero__logo {
+    width: min(74cqw, 380px);
+  }
+  .hero__note {
+    width: min(58cqw, 230px);
+    margin-top: 6px;
+    transform: rotate(-3deg);
+  }
+  @container (min-width: 760px) {
+    .hero__note {
+      position: absolute;
+      left: calc(50% + 210px);
+      top: 30px;
+      width: 200px;
+      margin: 0;
+      text-align: left;
+    }
+  }
+
+  /* BOOKINGS OPEN */
+  .hero__title {
+    margin: 22px 0 0;
+    font-weight: 600;
+  }
+  .hero__display {
+    display: block;
+    font: 600 clamp(2.6rem, 16cqw, 7.4rem) / 0.92 var(--serif);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+  }
+  /* One calm entrance for all the copy, overlapping the end of the logo. */
+  .hero__copy {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+  }
+  .hero-fade {
+    animation: hero-copy 0.9s ease-out 0.9s both;
+  }
+  @keyframes hero-copy {
+    from {
+      opacity: 0;
+      translate: 0 10px; /* separate from transform, so the note keeps its tilt */
+    }
+  }
+
+  .hero__rule {
+    position: relative;
+    width: min(86cqw, 560px);
+    height: 12px;
+    margin: 18px 0 6px;
+  }
+  .hero__rule::before,
+  .hero__rule::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 14px);
+    height: 1px;
+    background: rgb(169 53 24 / 0.45);
+  }
+  .hero__rule::before {
+    left: 0;
+    transform-origin: 100% 50%;
+  }
+  .hero__rule::after {
+    right: 0;
+    transform-origin: 0 50%;
+  }
+  .hero__rule span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    margin: -3.5px;
+    border-radius: 50%;
+    background: var(--terracotta);
+  }
+
+  /* Olive dry-brush banner */
+  .brush-banner {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    margin-top: 14px;
+    padding: 16px 34px;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .brush-banner__paint {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transition: transform 0.5s var(--ease-spring);
+  }
+  .brush-banner__paint path {
+    fill: var(--olive);
+  }
+  .brush-banner__paint .streak {
+    fill: none;
+    stroke: var(--olive);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    opacity: 0.7;
+  }
+  .brush-banner__text {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 700 clamp(1rem, 4.6cqw, 1.35rem) / 1 var(--sans);
+    letter-spacing: 0.01em;
+  }
+  .brush-banner .icon {
+    transition: transform 0.35s var(--ease-out);
+  }
+  .brush-banner:hover .icon {
+    transform: translateX(5px);
+  }
+  .brush-banner:hover .brush-banner__paint {
+    transform: scale(1.03, 1.08) rotate(-0.6deg);
+  }
+
+  .hero__slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 26px 0 0;
+    font: 700 clamp(1rem, 4.4cqw, 1.2rem) / 1.25 var(--sans);
+    color: var(--ink);
+  }
+  .hero__slot .icon {
+    color: var(--terracotta);
+  }
+  .hero__slot .hero__sprig {
+    color: var(--olive);
+  }
+</style>

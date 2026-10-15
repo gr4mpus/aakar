@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Studio Akaar — Create • Connect • Express | 11 Art & Clay Workshops</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF3EB',
+            sand: '#EFE2D3',
+            sandDark: '#E3CFAF',
+            terracotta: '#A93518',
+            terracottaLight: '#C84B2B',
+            ochre: '#E28C1F',
+            olive: '#3A4624',
+            oliveLight: '#4E5D32',
+            charcoal: '#1C1B19',
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            hand: ['"Caveat"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-cream: #FAF3EB;
+      --surface-sand: #EFE2D3;
+      --clay-terracotta: #A93518;
+      --ochre-gold: #E28C1F;
+      --olive-brush: #3A4624;
+      --ink-charcoal: #1C1B19;
+      --scroll-y: 0;
+      --scroll-progress: 0;
+      --scroll-vel: 0;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--ink-charcoal);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      min-height: 100svh;
+    }
+
+    ::selection {
+      background: rgba(226, 140, 31, 0.28);
+      color: #A93518;
+    }
+
+    /* Container Query Shell so both Mobile and IG Simulator Frame scale typography without clipping */
+    #studio-app-shell {
+      container-type: inline-size;
+      container-name: studio;
+    }
+
+    /* Responsive Hero Headline using Container Query Width (cqw) so 'BOOKINGS OPEN' never clips in IG Frame */
+    .bookings-open-headline {
+      font-size: clamp(2.15rem, 11.2cqw, 6.4rem);
+      line-height: 0.9;
+      letter-spacing: 0.025em;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .bookings-open-sub {
+      font-size: clamp(2.0rem, 10.5cqw, 5.9rem);
+      line-height: 0.92;
+    }
+
+    /* Adaptive 2-Column Workshop Grid ONLY when container itself is wider than 760px */
+    .workshops-vertical-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    @container studio (min-width: 760px) {
+      .workshops-vertical-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2.25rem;
+      }
+      .workshops-vertical-grid > .workshop-card:nth-child(even) {
+        margin-top: 3rem;
+      }
+      .hero-handwritten-callout {
+        position: absolute;
+        right: -0.5rem;
+        top: 1.25rem;
+        text-align: left;
+      }
+    }
+
+    /* Mobile-First Horizontal Alignment for the 3 Studio Promises (Prevents Mobile Text Overlap) */
+    .promises-responsive-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .promise-badge-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 1rem;
+      padding: 0.85rem 0.5rem;
+    }
+
+    .promise-badge-item + .promise-badge-item {
+      border-top: 2px dotted rgba(169, 53, 24, 0.28);
+    }
+
+    .promise-vertical-divider {
+      display: none;
+    }
+
+    @container studio (min-width: 640px) {
+      .promises-responsive-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: start;
+      }
+      .promise-badge-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.65rem;
+        padding: 0.25rem 1rem;
+      }
+      .promise-badge-item + .promise-badge-item {
+        border-top: none;
+      }
+      .promise-vertical-divider {
+        display: block;
+      }
+    }
+
+    /* Product Page 2-Column Layout on Desktop, Stacked on Mobile / IG Frame */
+    .product-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .product-details-bento {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @container studio (min-width: 780px) {
+      .product-hero-grid {
+        grid-template-columns: 1.02fr 0.98fr;
+        gap: 2.5rem;
+        align-items: start;
+      }
+      .product-carousel-sticky {
+        position: sticky;
+        top: 5.5rem;
+      }
+      .product-details-bento {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+    }
+
+    @keyframes clayBreathe {
+      0%, 100% { transform: scale(1, 1) rotate(0deg); }
+      33% { transform: scale(1.035, 0.97) rotate(-1.5deg); }
+      66% { transform: scale(0.975, 1.03) rotate(1.5deg); }
+    }
+
+    @keyframes logoBlobReveal {
+      0% { opacity: 0; transform: scale(0.45) rotate(-20deg); }
+      70% { opacity: 1; transform: scale(1.05) rotate(2deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes crescentOrbit {
+      0% { opacity: 0; transform: translate(-16px, 12px) rotate(-28deg) scale(0.8); }
+      75% { opacity: 1; transform: translate(2px, -2px) rotate(2deg) scale(1.02); }
+      100% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+    }
+
+    @keyframes potWheelPull {
+      0% {
+        opacity: 0;
+        clip-path: inset(100% 0 0 0);
+        transform: translateY(14px) scaleX(1.14) scaleY(0.82);
+      }
+      65% {
+        opacity: 1;
+        clip-path: inset(0% 0 0 0);
+        transform: translateY(-2px) scaleX(0.95) scaleY(1.04);
+      }
+      100% {
+        opacity: 1;
+        clip-path: inset(0% 0 0 0);
+        transform: translateY(0) scaleX(1) scaleY(1);
+      }
+    }
+
+    @keyframes slipStrokeDraw {
+      0% { stroke-dashoffset: 60; opacity: 0; }
+      20% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 1; }
+    }
+
+    @keyframes heartPop {
+      0%, 100% { transform: scale(1) rotate(-3deg); }
+      50% { transform: scale(1.09) rotate(4deg); }
+    }
+
+    @keyframes heroTextRise {
+      0% { opacity: 0; transform: translateY(28%) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0%) scale(1); }
+    }
+
+    .animate-clay-blob {
+      transform-origin: 95px 86px;
+      animation: logoBlobReveal 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 clayBreathe 6.5s ease-in-out 0.9s infinite;
+    }
+
+    .animate-crescent {
+      transform-origin: 125px 72px;
+      animation: crescentOrbit 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+    }
+
+    .animate-pot {
+      transform-origin: 112px 128px;
+      animation: potWheelPull 0.95s cubic-bezier(0.25, 1, 0.5, 1) 0.32s both;
+    }
+
+    .animate-slip-1 { stroke-dasharray: 60; animation: slipStrokeDraw 0.55s ease-out 0.92s both; }
+    .animate-slip-2 { stroke-dasharray: 60; animation: slipStrokeDraw 0.55s ease-out 1.08s both; }
+    .animate-slip-3 { stroke-dasharray: 60; animation: slipStrokeDraw 0.55s ease-out 1.22s both; }
+
+    .hero-title-rise { animation: heroTextRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both; }
+
+    /* ==================== SUBTLE BLOOMING GREEN BACKGROUND BRANCHES ==================== */
+    .bg-bloom-branch {
+      opacity: 0;
+      transform: scale(0.28) rotate(var(--initial-rot, -18deg));
+      transform-origin: var(--origin-x, 50%) var(--origin-y, 90%);
+      transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.05s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: transform, opacity;
+    }
+
+    .bg-bloom-branch.bloomed {
+      /* Kept intentionally subtle as a delicate studio hint (0.13 - 0.16 opacity) */
+      opacity: var(--target-opacity, 0.15);
+      transform: scale(1) rotate(calc(var(--base-rot, 0deg) + var(--sway-offset, 0deg)));
+    }
+
+    .bg-bloom-branch .leaf-node {
+      transform: scale(0.2);
+      transform-origin: center bottom;
+      transition: transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .bg-bloom-branch.bloomed .leaf-node {
+      transform: scale(1);
+    }
+
+    /* ==================== ORGANIC SVG CLAY PHOTO MASKS & SCROLL PHYSICS ==================== */
+    .organic-photo-mask-1 { clip-path: url(#clay-mask-arch); }
+    .organic-photo-mask-2 { clip-path: url(#clay-mask-pebble); }
+    .organic-photo-mask-3 { clip-path: url(#clay-mask-vessel); }
+    .organic-photo-mask-4 { clip-path: url(#clay-mask-leaf-arch); }
+    .organic-photo-mask-5 { clip-path: url(#clay-mask-playful-blob); }
+
+    .workshop-card {
+      --card-progress: 0.5;
+      --img-pan-x: 0px;
+      --img-pan-y: 0px;
+      --mask-tilt: 0deg;
+      --mask-scale: 1;
+      --blob-shift-y: 0px;
+      --blob-rot: 0deg;
+      --stamp-rot: 0deg;
+    }
+
+    .workshop-photo-stage {
+      transform: scale(var(--mask-scale, 1)) rotate(var(--mask-tilt, 0deg));
+      transition: transform 0.18s ease-out;
+      will-change: transform;
+    }
+
+    .workshop-blob-shadow {
+      transform: translate3d(0, var(--blob-shift-y, 0px), 0) rotate(var(--blob-rot, -2deg));
+      transition: transform 0.2s ease-out;
+      will-change: transform;
+    }
+
+    .workshop-card .workshop-img {
+      transform: scale(1.18) translate3d(var(--img-pan-x, 0px), var(--img-pan-y, 0px), 0);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+      will-change: transform, opacity;
+    }
+
+    .workshop-card.is-active-card .workshop-img,
+    .workshop-card:hover .workshop-img {
+      transform: scale(1.12) translate3d(var(--img-pan-x, 0px), var(--img-pan-y, 0px), 0);
+    }
+
+    .scroll-spin-stamp {
+      transform: rotate(var(--stamp-rot, 0deg));
+      transition: transform 0.12s linear;
+      will-change: transform;
+    }
+
+    .doodle-sticker {
+      opacity: 0;
+      transform: scale(0.45) rotate(-15deg);
+      transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .workshop-card.in-view .doodle-sticker,
+    .workshop-card:hover .doodle-sticker,
+    .workshop-card.is-active-card .doodle-sticker {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    .workshop-card.is-active-card {
+      border-color: rgba(169, 53, 24, 0.45);
+      box-shadow: 0 18px 38px -12px rgba(169, 53, 24, 0.15), 0 4px 12px rgba(28, 27, 25, 0.05);
+    }
+
+    /* Subtle Scroll-Animated Detail Cards on the Workshop Product Page */
+    .product-scroll-card {
+      --detail-progress: 0.5;
+      --detail-tilt: 0deg;
+      --detail-y: 0px;
+      --detail-scale: 1;
+      transform: translate3d(0, var(--detail-y, 0px), 0) scale(var(--detail-scale, 1)) rotate(var(--detail-tilt, 0deg));
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      will-change: transform;
+    }
+
+    .product-scroll-card.is-focused-detail {
+      border-color: rgba(169, 53, 24, 0.4);
+      box-shadow: 0 16px 34px -12px rgba(169, 53, 24, 0.12);
+    }
+
+    .product-scroll-card .sketch-underline {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .product-scroll-card.is-focused-detail .sketch-underline,
+    .product-scroll-card:hover .sketch-underline {
+      stroke-dashoffset: 0;
+    }
+
+    .draw-on-scroll {
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      transition: stroke-dashoffset 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .in-view .draw-on-scroll,
+    .draw-on-scroll.in-view {
+      stroke-dashoffset: 0;
+    }
+
+    .brush-wipe {
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .brush-wipe.in-view {
+      clip-path: inset(0 0% 0 0);
+    }
+
+    body.ig-webview-simulator {
+      background-color: #151413;
+      padding: 16px 0 44px 0;
+    }
+
+    body.ig-webview-simulator #studio-app-shell {
+      max-width: 402px;
+      margin: 0 auto;
+      border-radius: 38px;
+      border: 7px solid #2A2826;
+      box-shadow: 0 32px 95px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(250, 243, 235, 0.14);
+      overflow-x: hidden;
+      background-color: var(--bg-cream);
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .dotted-terracotta-line {
+      background-image: radial-gradient(circle, #A93518 2.1px, transparent 2.4px);
+      background-size: 12px 6px;
+      background-repeat: repeat-x;
+      height: 6px;
+    }
+
+    .dotted-vertical-divider {
+      background-image: radial-gradient(circle, #A93518 1.6px, transparent 1.9px);
+      background-size: 6px 10px;
+      background-repeat: repeat-y;
+      width: 6px;
+    }
+
+    .sketch-underline {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      transition: stroke-dashoffset 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .workshop-card:hover .sketch-underline,
+    .workshop-card.is-active-card .sketch-underline {
+      stroke-dashoffset: 0;
+    }
+
+    /* Perforated Coupon Ticket Styling */
+    .coupon-ticket-card {
+      background: linear-gradient(135deg, rgba(239, 226, 211, 0.95) 0%, rgba(250, 243, 235, 0.98) 100%);
+      border: 1.5px dashed rgba(169, 53, 24, 0.45);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-ochre/25 selection:text-terracotta">
+
+  <svg class="w-0 h-0 absolute pointer-events-none" aria-hidden="true">
+    <defs>
+      <!-- Zero-Byte Tactile Cotton Paper Grain (<feTurbulence>) -->
+      <filter id="akaar-paper-grain" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" stitchTiles="stitch" result="noise" />
+        <feColorMatrix type="matrix" values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 0.032 0" in="noise" />
+      </filter>
+
+      <!-- Reusable Botanical Olive Branch Symbol (Matches the top-right branch for subtle background blooming) -->
+      <g id="akaar-botanical-branch">
+        <path d="M 60,150 C 48,112 34,68 20,10" stroke="#3A4624" stroke-width="2.2" stroke-linecap="round" fill="none" />
+        <path class="leaf-node" style="transition-delay: 60ms" d="M 28,42 C 10,36 -2,22 -4,8 C 12,10 24,22 28,42 Z" fill="#4E5B33" />
+        <path class="leaf-node" style="transition-delay: 120ms" d="M 31,36 C 40,20 54,10 66,8 C 58,24 44,32 31,36 Z" fill="#3A4624" />
+        <path class="leaf-node" style="transition-delay: 180ms" d="M 38,76 C 16,72 0,58 -6,42 C 14,42 30,56 38,76 Z" fill="#3A4624" />
+        <path class="leaf-node" style="transition-delay: 240ms" d="M 42,70 C 52,52 66,40 80,38 C 72,54 56,66 42,70 Z" fill="#5D6B3F" />
+        <path class="leaf-node" style="transition-delay: 300ms" d="M 49,112 C 26,108 6,96 -2,80 C 20,80 38,92 49,112 Z" fill="#58663B" />
+        <path class="leaf-node" style="transition-delay: 360ms" d="M 52,106 C 64,90 78,80 92,78 C 82,94 68,104 52,106 Z" fill="#3A4624" />
+        <path d="M 28,42 L 6,18 M 38,76 L 8,52 M 49,112 L 16,90" stroke="#FAF3EB" stroke-width="0.9" opacity="0.5" fill="none" />
+      </g>
+
+      <!-- 5 Organic Clay Photo Clip-Paths -->
+      <clipPath id="clay-mask-arch" clipPathUnits="objectBoundingBox">
+        <path d="M 0.06,0.46 C 0.05,0.16 0.23,0.02 0.51,0.02 C 0.79,0.02 0.95,0.17 0.95,0.47 C 0.95,0.68 0.97,0.85 0.91,0.93 C 0.83,0.99 0.17,0.99 0.09,0.93 C 0.03,0.85 0.07,0.68 0.06,0.46 Z" />
+      </clipPath>
+
+      <clipPath id="clay-mask-pebble" clipPathUnits="objectBoundingBox">
+        <path d="M 0.16,0.06 C 0.42,-0.01 0.82,0.03 0.93,0.22 C 1.01,0.42 0.95,0.78 0.82,0.92 C 0.66,1.02 0.22,0.99 0.08,0.85 C -0.02,0.68 0.02,0.38 0.07,0.21 C 0.10,0.12 0.12,0.08 0.16,0.06 Z" />
+      </clipPath>
+
+      <clipPath id="clay-mask-vessel" clipPathUnits="objectBoundingBox">
+        <path d="M 0.18,0.03 C 0.38,0.01 0.62,0.01 0.82,0.03 C 0.94,0.07 0.97,0.26 0.93,0.46 C 0.98,0.68 0.94,0.91 0.81,0.96 C 0.60,1.00 0.40,1.00 0.19,0.96 C 0.06,0.91 0.02,0.68 0.07,0.46 C 0.03,0.26 0.06,0.07 0.18,0.03 Z" />
+      </clipPath>
+
+      <clipPath id="clay-mask-leaf-arch" clipPathUnits="objectBoundingBox">
+        <path d="M 0.08,0.24 C 0.14,0.05 0.46,-0.01 0.76,0.05 C 0.96,0.11 0.98,0.42 0.94,0.72 C 0.91,0.94 0.72,0.99 0.46,0.98 C 0.16,0.97 0.03,0.88 0.04,0.62 C 0.04,0.44 0.05,0.34 0.08,0.24 Z" />
+      </clipPath>
+
+      <clipPath id="clay-mask-playful-blob" clipPathUnits="objectBoundingBox">
+        <path d="M 0.14,0.08 C 0.36,0.01 0.66,0.01 0.86,0.09 C 0.98,0.18 0.98,0.44 0.93,0.66 C 0.97,0.84 0.86,0.97 0.64,0.98 C 0.42,0.99 0.20,0.98 0.08,0.88 C 0.01,0.74 0.04,0.52 0.04,0.34 C 0.04,0.19 0.07,0.11 0.14,0.08 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <!-- FULL-VIEWPORT PAPER GRAIN OVERLAY -->
+  <div class="fixed inset-0 pointer-events-none z-50 overflow-hidden" aria-hidden="true">
+    <svg class="w-full h-full">
+      <rect width="100%" height="100%" filter="url(#akaar-paper-grain)" />
+    </svg>
+  </div>
+
+  <!-- ==================== ORIGINAL DELICATE VIEWPORT-SPANNING TERRACOTTA RED LINE ==================== -->
+  <div class="fixed inset-0 pointer-events-none z-[1] overflow-hidden select-none" aria-hidden="true">
+    <svg viewBox="0 0 100 1000" preserveAspectRatio="none" class="w-full h-full">
+      <path
+        id="scroll-clay-thread"
+        d="M50,0 C68,180 32,360 54,540 C72,720 30,860 50,1000"
+        fill="none"
+        stroke="#A93518"
+        stroke-width="1.4"
+        opacity="0.24"
+        stroke-dasharray="1400"
+        stroke-dashoffset="1400"
+      />
+    </svg>
+  </div>
+
+  <header id="sticky-header" class="sticky top-0 z-40 backdrop-blur-md bg-cream/92 border-b border-terracotta/15 transition-all duration-300">
+    <!-- Top Scroll-Synchronized Terracotta Progress Bar -->
+    <div class="w-full h-1 bg-sand overflow-hidden">
+      <div id="top-scroll-progress-bar" class="h-full bg-gradient-to-r from-ochre via-terracotta to-olive w-0 transition-[width] duration-75"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
+      <!-- Left: Compact Studio Akaar Lockup (Clicks back to Home Page) -->
+      <button onclick="switchToHomeView()" class="flex items-center gap-2 group focus:outline-none shrink-0 text-left">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-sand flex items-center justify-center border border-terracotta/25 group-hover:scale-105 transition-transform">
+          <svg id="nav-mini-logo" viewBox="0 0 44 44" class="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-150">
+            <path d="M17,8 C11,8 8,15 10,23 C12,29 9,34 16,35 C23,36 28,29 27,21 C26,13 22,8 17,8 Z" fill="#E28C1F"/>
+            <path d="M21,6 C28,5 35,11 35,20 C35,27 30,32 26,32 C30,28 31,22 29,16 C27,11 23,8 21,6 Z" fill="#1C1B19"/>
+            <path d="M18,19 L25,19 L24,21 C27,23 28,28 26,33 C25,35 19,35 18,33 C16,28 17,23 20,21 Z" fill="#A93518"/>
+          </svg>
+        </div>
+        <div class="leading-none">
+          <span class="block text-[7.5px] tracking-[0.38em] font-semibold text-charcoal uppercase">STUDIO</span>
+          <span class="font-serif text-lg sm:text-xl font-bold tracking-[0.16em] text-charcoal lowercase">akaar</span>
+        </div>
+      </button>
+
+      <!-- Center: Quick View Switcher (Home vs Featured Wheel Pottery Product Page) -->
+      <div class="flex items-center gap-1.5 bg-sand/90 p-1 rounded-full border border-terracotta/20">
+        <button
+          id="nav-btn-home"
+          onclick="switchToHomeView()"
+          class="px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-terracotta text-cream transition-all"
+        >
+          🏠 Home
+        </button>
+        <button
+          id="nav-btn-product"
+          onclick="openWorkshopProductPage('wheel-pottery')"
+          class="px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-semibold text-charcoal hover:bg-cream/80 transition-all flex items-center gap-1"
+        >
+          <span>🏺</span>
+          <span class="hidden xs:inline sm:inline">Wheel Pottery</span>
+          <span class="xs:hidden sm:hidden">Pottery</span>
+        </button>
+      </div>
+
+      <!-- Right: IG Mobile Frame Toggle + Studio Cart Drawer Button -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <button
+          id="ig-simulator-btn"
+          onclick="toggleIGSimulator()"
+          title="Preview exact Instagram Mobile In-App Browser Frame"
+          class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-sand hover:bg-sandDark text-charcoal border border-charcoal/15 transition-all"
+        >
+          <svg class="w-3.5 h-3.5 text-terracotta shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="6" y="2" width="12" height="20" rx="2.5" />
+            <line x1="12" y1="18" x2="12.01" y2="18" />
+          </svg>
+          <span id="ig-simulator-label" class="hidden sm:inline">IG Mobile View</span>
+          <span class="sm:hidden">IG View</span>
+        </button>
+
+        <button
+          onclick="openCartDrawer()"
+          class="relative inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-xs font-bold bg-terracotta hover:bg-terracottaLight text-cream shadow-xs hover:shadow transition-all active:scale-95"
+        >
+          <span>🛒 Cart</span>
+          <span id="header-cart-badge" class="px-1.5 py-0.2 rounded-full bg-cream text-terracotta text-[10px] font-extrabold">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="studio-app-shell" class="relative min-h-screen overflow-hidden transition-all duration-300">
+
+    <!-- ==================== 12 SUBTLE BLOOMING GREEN BACKGROUND BRANCHES ==================== -->
+    <div id="ambient-scroll-garden" class="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none" aria-hidden="true">
+      <div id="blooming-branches-container" class="absolute inset-0 w-full h-full"></div>
+    </div>
+
+    <!-- ==================== UNCLUTTERED TOP CORNER ACCENTS ==================== -->
+    <div id="decor-corner-tl" class="pointer-events-none absolute -top-5 -left-6 w-24 sm:w-40 md:w-52 z-0 select-none opacity-40 sm:opacity-60 will-change-transform">
+      <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M-20,-20 L230,-20 C195,42 140,105 80,165 C35,210 5,245 -20,280 Z" fill="#C86428" opacity="0.85"/>
+        <path d="M-20,-20 L195,-20 C160,40 110,100 55,155 C18,192 -5,225 -20,250 Z" fill="#A93518" opacity="0.72"/>
+        <path d="M245,-10 C205,48 148,112 72,185 M220,30 C175,82 120,140 48,205"
+              stroke="#C86428" stroke-width="5" stroke-linecap="round" stroke-dasharray="18 7 32 9" opacity="0.75"/>
+      </svg>
+    </div>
+
+    <div id="decor-leaf-tr" class="pointer-events-none absolute -top-2 -right-3 w-16 sm:w-28 md:w-36 z-0 select-none opacity-38 sm:opacity-60 origin-top-right will-change-transform">
+      <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M165,155 C135,120 105,75 82,10" stroke="#3A4624" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M96,48 C72,42 54,28 50,12 C70,14 88,28 96,48 Z" fill="#4E5B33" opacity="0.9"/>
+        <path d="M102,42 C112,24 128,12 142,10 C134,28 118,38 102,42 Z" fill="#3A4624" opacity="0.85"/>
+        <path d="M114,82 C84,78 60,64 52,46 C78,46 102,60 114,82 Z" fill="#3A4624" opacity="0.88"/>
+        <path d="M118,75 C130,56 146,44 162,42 C152,60 135,72 118,75 Z" fill="#5D6B3F" opacity="0.88"/>
+        <path d="M132,118 C100,115 74,102 64,84 C92,84 118,98 132,118 Z" fill="#58663B" opacity="0.9"/>
+      </svg>
+    </div>
+
+    <div class="pointer-events-none absolute top-28 sm:top-40 left-3 sm:left-8 z-10 opacity-55 sm:opacity-75" aria-hidden="true">
+      <div class="grid grid-cols-3 gap-1.5 sm:gap-2.5">
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-charcoal"></span>
+      </div>
+    </div>
+
+    <!-- ========================================================================== -->
+    <!-- VIEW 1: STUDIO AKAAR HOME PAGE (#home-view)                                -->
+    <!-- ========================================================================== -->
+    <main id="home-view" class="relative z-10 max-w-5xl mx-auto px-3 sm:px-8 pt-4 sm:pt-8 pb-20">
+
+      <!-- Top Logo & Handwritten Callout Lockup -->
+      <div id="hero-stage" class="relative flex flex-col items-center justify-center">
+        <div class="relative w-full max-w-2xl flex flex-col items-center justify-center">
+
+          <!-- CENTERED ANIMATED STUDIO AKAAR LOGO -->
+          <div class="flex flex-col items-center text-center relative z-10">
+            <div
+              id="hero-logo-interactive"
+              onmousemove="handleHeroLogoParallax(event)"
+              onmouseleave="resetHeroLogoParallax()"
+              class="select-none group relative px-3 py-1 rounded-3xl transition-transform"
+            >
+              <svg id="akaar-emblem-svg" viewBox="0 0 220 175" class="w-32 h-26 sm:w-44 sm:h-36 mx-auto overflow-visible">
+                <g id="logo-blob-layer" class="transition-transform duration-200 ease-out">
+                  <path
+                    class="animate-clay-blob"
+                    d="M78,24 C62,23 58,39 62,56 C65,71 54,87 54,106 C54,128 71,142 93,139 C115,136 135,112 136,83 C137,56 116,44 102,33 C93,26 87,24 78,24 Z"
+                    fill="#E28C1F"
+                  />
+                </g>
+
+                <g id="logo-crescent-layer" class="transition-transform duration-200 ease-out">
+                  <path
+                    class="animate-crescent"
+                    d="M101,18 C126,11 158,27 166,58 C174,88 159,119 135,127 C134,127 132,126 133,124 C146,107 148,80 139,59 C130,39 111,29 98,21 C97,20 99,18 101,18 Z"
+                    fill="#1C1B19"
+                  />
+                </g>
+
+                <g id="logo-pot-layer" class="transition-transform duration-200 ease-out">
+                  <g class="animate-pot">
+                    <path
+                      d="M99,83 L125,83 C127,83 127,86 125,88 L121,93 C121,97 122,100 126,103 C135,110 138,125 133,139 C130,147 125,152 121,154 L103,154 C99,152 94,147 91,139 C86,125 89,110 98,103 C102,100 103,97 103,93 L99,88 C97,86 97,83 99,83 Z"
+                      fill="#A93518"
+                      stroke="#FAF3EB"
+                      stroke-width="1.5"
+                    />
+                    <path class="animate-slip-1" d="M107,134 C115,125 125,121 134,121" fill="none" stroke="#FAF3EB" stroke-width="3.2" stroke-linecap="round" />
+                    <path class="animate-slip-2" d="M109,141 C117,132 126,129 134,129" fill="none" stroke="#FAF3EB" stroke-width="2.8" stroke-linecap="round" />
+                    <path class="animate-slip-3" d="M114,147 C120,141 126,138 132,138" fill="none" stroke="#FAF3EB" stroke-width="2.2" stroke-linecap="round" />
+                  </g>
+                </g>
+              </svg>
+
+              <div class="-mt-1.5 flex flex-col items-center">
+                <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.55em] text-charcoal pl-[0.55em]">
+                  STUDIO
+                </span>
+                <h2 class="font-serif text-4xl sm:text-6xl font-semibold tracking-[0.22em] text-charcoal lowercase leading-none mt-0.5 pl-[0.22em]">
+                  akaar
+                </h2>
+                <p class="text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-charcoal/90 mt-2 pl-[0.22em]">
+                  CREATE <span class="text-terracotta mx-0.5">•</span> CONNECT <span class="text-terracotta mx-0.5">•</span> EXPRESS
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- HANDWRITTEN CALLOUT ("Shape it. Personalize it. Make it yours.") -->
+          <div id="hero-handwritten-note" class="hero-handwritten-callout mt-2.5 flex items-center justify-center gap-2.5 px-3 py-1 rounded-2xl bg-sand/45 border border-terracotta/10 rotate-[-1.5deg] will-change-transform">
+            <div class="font-hand text-lg sm:text-2xl leading-[1.12] text-terracotta tracking-wide">
+              <span class="inline sm:block">Shape it. </span>
+              <span class="inline sm:block">Personalize it. </span>
+              <span class="inline sm:block">Make it yours.</span>
+            </div>
+
+            <div class="shrink-0" style="animation: heartPop 3.4s ease-in-out infinite;">
+              <svg viewBox="0 0 64 64" class="w-8 h-8 sm:w-10 sm:h-10 overflow-visible">
+                <line x1="18" y1="16" x2="13" y2="6" stroke="#A93518" stroke-width="2.6" stroke-linecap="round" />
+                <line x1="31" y1="13" x2="32" y2="2" stroke="#A93518" stroke-width="2.6" stroke-linecap="round" />
+                <line x1="43" y1="17" x2="51" y2="8" stroke="#A93518" stroke-width="2.6" stroke-linecap="round" />
+                <path
+                  d="M30,52 C20,43 12,33 14,25 C15,19 22,18 27,24 C29,26 30,28 30,29 C31,26 35,19 41,20 C47,21 49,29 45,37 C41,44 34,49 30,52 Z"
+                  fill="none"
+                  stroke="#1C1B19"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- MASSIVE CONTAINER-RESPONSIVE HEADLINE: "BOOKINGS OPEN" (Unclipped in IG Frame) -->
+        <div id="hero-headline-block" class="mt-4 sm:mt-6 w-full px-2 text-center select-none will-change-transform">
+          <h1 class="font-serif font-bold uppercase text-terracotta bookings-open-headline hero-title-rise">
+            <span class="block">BOOKINGS</span>
+            <span class="block mt-0.5 bookings-open-sub">OPEN</span>
+          </h1>
+        </div>
+
+        <!-- Thin Terracotta Divider with Centered Dot (No 'Swipe Right' text at top) -->
+        <div class="w-full max-w-md mx-auto flex items-center justify-center gap-3 my-3.5 sm:my-4 px-6">
+          <div class="h-[1px] flex-1 bg-terracotta/55"></div>
+          <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-terracotta inline-block"></span>
+          <div class="h-[1px] flex-1 bg-terracotta/55"></div>
+        </div>
+
+        <!-- ORGANIC OLIVE GREEN DRY-BRUSH STROKE BANNER: "Explore Our Workshops" -->
+        <div class="relative mt-1 sm:mt-2 w-full max-w-xl mx-auto flex items-center justify-center brush-wipe in-view">
+          <svg viewBox="0 0 640 74" class="w-full h-12 sm:h-16 drop-shadow-xs select-none" preserveAspectRatio="none">
+            <path d="M28,14 C165,8 470,9 608,14 C625,16 636,22 618,27 C638,31 632,42 612,46 C628,51 615,60 592,62 C445,66 185,65 36,61 C12,59 6,52 24,47 C4,43 8,32 28,28 C10,23 14,16 28,14 Z"
+                  fill="#3A4624" />
+            <path d="M8,20 L38,20 M2,35 L32,35 M12,49 L40,49 M18,57 L45,57 M600,19 L632,19 M605,34 L638,34 M596,49 L629,49 M588,58 L618,58"
+                  stroke="#3A4624" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="9 4 14 3" />
+          </svg>
+          <span class="absolute inset-0 flex items-center justify-center font-sans font-semibold text-cream text-base sm:text-2xl tracking-[0.06em]">
+            Explore Our Workshops
+          </span>
+        </div>
+
+        <!-- QUICK-JUMP WORKSHOP REEL (Tapping any pill opens that workshop's dedicated Product Page) -->
+        <div class="w-full max-w-3xl mx-auto mt-4">
+          <div class="flex items-center justify-between px-2 mb-1.5">
+            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-olive flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-terracotta animate-ping"></span>
+              <span>Tap Any Workshop to Open Its Full Product &amp; Booking Page</span>
+            </span>
+            <span class="text-[11px] font-serif italic font-semibold text-terracotta">11 Studio Sessions</span>
+          </div>
+
+          <div id="story-reel-container" class="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1.5 px-1 snap-x">
+            <!-- Dynamically populated from workshopsData -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 2: WORKSHOPS SHOWCASE (CLEAN BACKEND-DRIVEN CATALOG) ==================== -->
+      <section id="workshops-showcase" class="mt-6 sm:mt-9 relative">
+
+        <!-- Category Filter Bar (Frontend Add/Delete buttons removed as requested) -->
+        <div class="flex items-center justify-between gap-2.5 mb-6 bg-sand/90 border border-terracotta/15 rounded-2xl p-2.5 sm:px-4 shadow-2xs">
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5" role="tablist" aria-label="Filter Workshops">
+            <button onclick="filterWorkshops('all')" data-filter="all" class="category-pill px-3.5 py-1.5 rounded-xl text-xs font-bold bg-terracotta text-cream shadow-2xs whitespace-nowrap transition-all">
+              All Workshops (<span id="pill-count-all">11</span>)
+            </button>
+            <button onclick="filterWorkshops('clay')" data-filter="clay" class="category-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-cream/85 hover:bg-cream text-charcoal whitespace-nowrap transition-all">
+              Pottery &amp; Clay
+            </button>
+            <button onclick="filterWorkshops('painting')" data-filter="painting" class="category-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-cream/85 hover:bg-cream text-charcoal whitespace-nowrap transition-all">
+              Canvas &amp; Painting
+            </button>
+            <button onclick="filterWorkshops('craft')" data-filter="craft" class="category-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-cream/85 hover:bg-cream text-charcoal whitespace-nowrap transition-all">
+              Kintsugi, Resin &amp; Craft
+            </button>
+          </div>
+
+          <span class="hidden md:inline-block text-[11px] font-medium text-charcoal/70 shrink-0">
+            Coupon <strong class="text-terracotta">FLAT10</strong>: 10% off above ₹1500
+          </span>
+        </div>
+
+        <!-- WORKSHOPS VERTICAL SCROLL STAGE (Strictly Vertical Stack on Mobile, Staggered 2-Col on Wide Desktop) -->
+        <div id="workshops-stage" class="workshops-vertical-grid pb-6 pt-1 px-0.5">
+          <!-- Populated dynamically via renderAllWorkshopViews() -->
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 3: DOTTED HEART DIVIDER, CALENDAR CALLOUT & 3 STUDIO PROMISES ==================== -->
+      <section id="studio-promises" class="mt-10 sm:mt-16 relative z-10">
+
+        <!-- Exact Poster Horizontal Terracotta Dotted Line Centered with Solid Terracotta Heart -->
+        <div class="max-w-xl mx-auto flex items-center justify-center gap-3 px-4">
+          <div class="flex-1 dotted-terracotta-line"></div>
+          <svg viewBox="0 0 36 32" class="w-7 h-7 text-terracotta shrink-0 hover:scale-125 transition-transform cursor-pointer" onclick="openWorkshopProductPage('wheel-pottery')">
+            <path d="M18,29 C18,29 3,19.5 3,10 C3,4.8 7.2,1 12,1 C15,1 17.2,2.6 18,4.8 C18.8,2.6 21,1 24,1 C28.8,1 33,4.8 33,10 C33,19.5 18,29 18,29 Z" fill="#A93518"/>
+          </svg>
+          <div class="flex-1 dotted-terracotta-line"></div>
+        </div>
+
+        <!-- Poster Callout: Terracotta Calendar Icon + "Book Your Favourite Slot Today" + Hand-Drawn Olive Leaf Sprig -->
+        <div class="mt-6 sm:mt-8 flex justify-center px-2">
+          <button
+            onclick="openWorkshopProductPage('wheel-pottery')"
+            class="group relative inline-flex items-center gap-3.5 sm:gap-6 px-4 sm:px-8 py-3.5 sm:py-4 rounded-3xl bg-sand/80 hover:bg-sand border border-terracotta/25 shadow-xs hover:shadow-md transition-all active:scale-98 text-left"
+          >
+            <div class="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center shrink-0 group-hover:-rotate-6 transition-transform">
+              <svg viewBox="0 0 64 64" class="w-full h-full">
+                <rect x="8" y="12" width="48" height="44" rx="8" fill="none" stroke="#A93518" stroke-width="3.8"/>
+                <line x1="8" y1="25" x2="56" y2="25" stroke="#A93518" stroke-width="3.5"/>
+                <line x1="21" y1="6" x2="21" y2="16" stroke="#A93518" stroke-width="4" stroke-linecap="round"/>
+                <line x1="43" y1="6" x2="43" y2="16" stroke="#A93518" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="20" cy="35" r="3" fill="#A93518"/>
+                <circle cx="32" cy="35" r="3" fill="#A93518"/>
+                <circle cx="44" cy="35" r="3" fill="#A93518"/>
+                <circle cx="20" cy="45" r="3" fill="#A93518"/>
+                <circle cx="32" cy="45" r="3" fill="#A93518"/>
+                <circle cx="44" cy="45" r="3" fill="#A93518"/>
+              </svg>
+            </div>
+
+            <div>
+              <span class="block text-lg sm:text-2xl md:text-3xl font-semibold text-olive tracking-tight leading-snug">
+                Book Your
+              </span>
+              <span class="block text-lg sm:text-2xl md:text-3xl font-semibold text-olive tracking-tight leading-snug group-hover:text-terracotta transition-colors">
+                Favourite Slot Today
+              </span>
+            </div>
+
+            <div class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 group-hover:rotate-12 transition-transform">
+              <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
+                <path d="M8,54 C24,44 38,30 52,12" stroke="#3A4624" stroke-width="2.6" stroke-linecap="round"/>
+                <path d="M22,42 C16,35 16,24 23,20 C28,26 27,36 22,42 Z" stroke="#3A4624" stroke-width="2.2" fill="none"/>
+                <path d="M36,28 C31,21 31,12 38,8 C42,14 41,22 36,28 Z" stroke="#3A4624" stroke-width="2.2" fill="none"/>
+                <path d="M25,40 C33,43 43,39 46,32 C39,29 30,33 25,40 Z" stroke="#3A4624" stroke-width="2.2" fill="none"/>
+                <path d="M39,25 C47,28 56,24 58,17 C51,14 44,18 39,25 Z" stroke="#3A4624" stroke-width="2.2" fill="none"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- ROUNDED WARM SAND (#EFE2D3) 3 STUDIO PROMISES STRIP -->
+        <!-- Horizontally aligned rows on Mobile (so text never overlaps), 3 Columns on Desktop -->
+        <div class="mt-8 sm:mt-10 max-w-2xl mx-auto">
+          <div class="bg-sand rounded-[28px] px-4 py-4 sm:px-8 sm:py-7 shadow-xs border border-terracotta/15">
+            <div class="promises-responsive-grid">
+
+              <!-- Badge 1: Take Home Your Personalized Creation -->
+              <div class="promise-badge-item group">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#E5CEB3] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <svg viewBox="0 0 48 48" class="w-8 h-8 sm:w-10 sm:h-10">
+                    <path class="draw-on-scroll in-view" d="M17,12 L31,12 C32,12 32,15 30,16 L28,18 C34,21 36,29 33,36 C31,39 28,40 24,40 C20,40 17,39 15,36 C12,29 14,21 20,18 L18,16 C16,15 16,12 17,12 Z"
+                          fill="none" stroke="#1C1B19" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M14,27 Q19,24 24,27 T34,27" fill="none" stroke="#1C1B19" stroke-width="1.8"/>
+                    <path d="M15,32 Q20,29 24,32 T33,32" fill="none" stroke="#1C1B19" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-wider text-charcoal leading-snug">
+                  TAKE HOME YOUR PERSONALIZED CREATION
+                </p>
+              </div>
+
+              <!-- Badge 2: All Materials Included (Olive Circle) -->
+              <div class="promise-badge-item relative group">
+                <div class="promise-vertical-divider absolute left-0 top-1 bottom-1 dotted-vertical-divider opacity-85"></div>
+                <div class="promise-vertical-divider absolute right-0 top-1 bottom-1 dotted-vertical-divider opacity-85"></div>
+
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-olive flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-xs">
+                  <svg viewBox="0 0 48 48" class="w-8 h-8 sm:w-10 sm:h-10">
+                    <rect x="17" y="10" width="14" height="4" rx="1.5" fill="none" stroke="#FAF3EB" stroke-width="1.8"/>
+                    <path class="draw-on-scroll in-view" d="M18,14 L30,14 L32,19 L32,36 C32,38.5 30,40 27.5,40 L20.5,40 C18,40 16,38.5 16,36 L16,19 Z"
+                          fill="none" stroke="#FAF3EB" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M24,35 L24,24 M24,29 L20,26 M24,27 L28,24" stroke="#FAF3EB" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="24" cy="22" r="2" fill="#FAF3EB"/>
+                  </svg>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-wider text-charcoal leading-snug">
+                  ALL MATERIALS INCLUDED
+                </p>
+              </div>
+
+              <!-- Badge 3: Fun, Relaxing & Beginner-Friendly -->
+              <div class="promise-badge-item group">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#E5CEB3] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <svg viewBox="0 0 48 48" class="w-8 h-8 sm:w-10 sm:h-10">
+                    <path class="draw-on-scroll in-view" d="M14,38 C20,30 27,20 34,10" fill="none" stroke="#1C1B19" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20,30 C15,25 15,17 21,14 C25,19 24,26 20,30 Z" fill="none" stroke="#1C1B19" stroke-width="1.8"/>
+                    <path d="M27,20 C23,15 23,9 29,6 C32,11 31,16 27,20 Z" fill="none" stroke="#1C1B19" stroke-width="1.8"/>
+                    <path d="M22,29 C28,31 36,28 38,22 C32,20 26,23 22,29 Z" fill="none" stroke="#1C1B19" stroke-width="1.8"/>
+                  </svg>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-wider text-charcoal leading-snug">
+                  FUN, RELAXING &amp; BEGINNER-FRIENDLY
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ========================================================================== -->
+    <!-- VIEW 2: DEDICATED ARTISTIC WORKSHOP PRODUCT & BOOKING PAGE (#product-view) -->
+    <!-- ========================================================================== -->
+    <section id="product-view" class="hidden relative z-10 max-w-5xl mx-auto px-3 sm:px-8 pt-4 sm:pt-7 pb-24">
+
+      <!-- Top Breadcrumb & Workshop Switcher Strip (Allows viewing Product Page for any of the 11 workshops) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 mb-5 border-b border-terracotta/15">
+        <button
+          onclick="switchToHomeView()"
+          class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-terracotta hover:text-charcoal transition-colors self-start"
+        >
+          <span class="w-7 h-7 rounded-full bg-sand flex items-center justify-center border border-terracotta/25">←</span>
+          <span>Back to All Studio Akaar Workshops</span>
+        </button>
+
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1" id="product-workshop-switcher">
+          <!-- Populated dynamically with all 11 workshops so user can switch between Wheel Pottery & others -->
+        </div>
+      </div>
+
+      <!-- PRODUCT HERO GRID: LEFT = ORGANIC CAROUSEL, RIGHT = BOOKING ENGINE -->
+      <div class="product-hero-grid">
+
+        <!-- LEFT COLUMN: ARTISTIC MULTI-PHOTO CAROUSEL -->
+        <div class="product-carousel-sticky">
+          <div class="bg-sand/85 rounded-[32px] p-3.5 sm:p-5 border border-terracotta/20 shadow-sm relative">
+
+            <!-- Main Organic Masked Carousel Stage -->
+            <div
+              id="product-carousel-touch-stage"
+              class="relative w-full aspect-[4/3] flex items-center justify-center select-none overflow-visible"
+            >
+              <!-- Warm Ochre Background Clay Blob Shadow -->
+              <div class="absolute inset-2 bg-ochre/25 rounded-[44%_56%_38%_62%/52%_44%_56%_48%] rotate-[-2deg] transition-transform duration-500" id="product-carousel-blob"></div>
+
+              <!-- Masked Image Frame -->
+              <div id="product-carousel-mask-box" class="organic-photo-mask-1 relative w-full h-full overflow-hidden bg-sandDark shadow-inner">
+                <img
+                  id="product-main-carousel-img"
+                  src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=80"
+                  alt="Wheel Pottery"
+                  class="w-full h-full object-cover object-center transition-all duration-500 scale-105"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-charcoal/10 pointer-events-none"></div>
+
+                <!-- Prev / Next Carousel Buttons -->
+                <button
+                  type="button"
+                  onclick="stepProductCarousel(-1)"
+                  aria-label="Previous photo"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-cream/90 hover:bg-terracotta text-charcoal hover:text-cream font-bold shadow-md flex items-center justify-center transition-all active:scale-90"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onclick="stepProductCarousel(1)"
+                  aria-label="Next photo"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-cream/90 hover:bg-terracotta text-charcoal hover:text-cream font-bold shadow-md flex items-center justify-center transition-all active:scale-90"
+                >
+                  ›
+                </button>
+
+                <!-- Bottom Caption & Slide Counter inside Carousel -->
+                <div class="absolute bottom-3.5 inset-x-5 z-20 flex items-center justify-between gap-2 pointer-events-none">
+                  <span id="product-slide-caption" class="px-3 py-1 rounded-full bg-charcoal/80 backdrop-blur-xs text-cream text-[10px] sm:text-xs font-semibold truncate">
+                    01 • Centering &amp; Shaping on the Wheel
+                  </span>
+                  <span id="product-slide-counter" class="px-2.5 py-1 rounded-full bg-cream/90 text-charcoal text-[10px] font-extrabold shrink-0">
+                    1 / 4
+                  </span>
+                </div>
+              </div>
+
+              <!-- Scroll-Spinning Studio Akaar Stamp on Corner -->
+              <div class="absolute -top-3 -right-2 z-20 w-16 h-16 sm:w-20 sm:h-20 pointer-events-none">
+                <svg viewBox="0 0 100 100" class="w-full h-full scroll-spin-stamp" id="product-hero-stamp">
+                  <defs>
+                    <path id="product-stamp-circle" d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
+                  </defs>
+                  <circle cx="50" cy="50" r="44" fill="#FAF3EB" stroke="#A93518" stroke-width="1.8" stroke-dasharray="4 3"/>
+                  <text fill="#A93518" font-size="8.1" font-weight="700" letter-spacing="2">
+                    <textPath href="#product-stamp-circle" id="product-stamp-textpath">WHEEL • THROWING • CERAMIC •</textPath>
+                  </text>
+                </svg>
+                <span id="product-stamp-icon" class="absolute inset-0 flex items-center justify-center text-base sm:text-lg">🏺</span>
+              </div>
+            </div>
+
+            <!-- Interactive Thumbnail Strip -->
+            <div id="product-thumbnails-row" class="mt-3.5 grid grid-cols-4 gap-2">
+              <!-- Populated dynamically with 4 curated slides -->
+            </div>
+
+            <!-- Quick Highlight Badges (Verbatim from Prompt) -->
+            <div id="product-highlights-strip" class="mt-4 pt-3.5 border-t border-terracotta/15 grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="flex items-center gap-2 px-3 py-2 rounded-2xl bg-cream/90 border border-terracotta/15 text-xs font-bold text-olive">
+                <span class="text-terracotta text-sm">◌</span>
+                <span id="pd-highlight-1">75 Minutes session</span>
+              </div>
+              <div class="flex items-center gap-2 px-3 py-2 rounded-2xl bg-cream/90 border border-terracotta/15 text-xs font-bold text-olive">
+                <span class="text-terracotta text-sm">◌</span>
+                <span id="pd-highlight-2">Age 12+ Beginner Friendly</span>
+              </div>
+              <div class="flex items-center gap-2 px-3 py-2 rounded-2xl bg-cream/90 border border-terracotta/15 text-xs font-bold text-olive">
+                <span class="text-terracotta text-sm">◌</span>
+                <span id="pd-highlight-3">All Materials Included</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: BOOKING DETAILS, COUPON, DATES, TIMES & ACTIONS -->
+        <div class="bg-sand/90 rounded-[32px] p-4 sm:p-7 border border-terracotta/25 shadow-sm space-y-5">
+
+          <!-- Title & Category Tag -->
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span id="pd-category-pill" class="px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-terracotta text-cream">
+                Signature Studio Session
+              </span>
+              <span class="text-xs font-hand text-terracotta text-lg">Shape it. Make it yours.</span>
+            </div>
+
+            <h1 id="pd-title" class="font-serif font-bold text-3xl sm:text-5xl text-charcoal leading-tight">
+              Wheel Pottery
+            </h1>
+
+            <!-- Hand-sketched terracotta underline -->
+            <svg viewBox="0 0 280 10" class="w-48 h-3 mt-1 text-terracotta">
+              <path d="M2,6 Q95,2 190,6 T276,4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- TACTILE COUPON TICKET: "Coupon: use FLAT10 for 10% off on order value above 1500" -->
+          <div class="coupon-ticket-card rounded-2xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-2xs">
+            <div class="flex items-start sm:items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-ochre/25 text-terracotta font-extrabold text-sm flex items-center justify-center shrink-0">
+                🏷
+              </span>
+              <p class="text-xs sm:text-sm font-bold text-charcoal leading-snug">
+                Coupon: use <span class="text-terracotta underline decoration-wavy">FLAT10</span> for 10% off on order value above 1500
+              </p>
+            </div>
+            <button
+              type="button"
+              id="apply-flat10-btn"
+              onclick="applyFlat10Coupon()"
+              class="px-3 py-1.5 rounded-xl bg-terracotta hover:bg-terracottaLight text-cream text-[11px] font-bold shrink-0 transition-all active:scale-95"
+            >
+              Apply FLAT10
+            </button>
+          </div>
+
+          <!-- PRICING BLOCK: ₹1000.00 strikethrough & ₹800.00 -->
+          <div class="flex items-baseline gap-3.5 bg-cream/80 px-4 py-3 rounded-2xl border border-terracotta/15">
+            <del id="pd-original-price" class="font-sans text-base sm:text-lg font-semibold text-charcoal/45">
+              ₹1000.00
+            </del>
+            <span id="pd-sale-price" class="font-serif font-bold text-3xl sm:text-4xl text-terracotta">
+              ₹800.00
+            </span>
+            <span class="ml-auto px-2.5 py-1 rounded-full bg-olive/15 text-olive text-[11px] font-bold">
+              Save 20% Today
+            </span>
+          </div>
+
+          <!-- Lead Description -->
+          <p id="pd-description" class="text-xs sm:text-sm text-charcoal/85 leading-relaxed">
+            Experience the calm of working on the pottery wheel—shape clay, center it, and create your own ceramic pieces with expert guidance.
+          </p>
+
+          <!-- SELECT DATE (10 Exact Date Pills) -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs font-extrabold uppercase tracking-wider text-charcoal">
+                Select Date
+              </label>
+              <span id="pd-selected-date-label" class="text-xs font-bold text-terracotta">Wed 14 Oct 2026</span>
+            </div>
+            <div id="pd-dates-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <!-- Populated dynamically with the 10 dates -->
+            </div>
+          </div>
+
+          <!-- SELECT TIME (5 Exact Time Slot Pills) -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs font-extrabold uppercase tracking-wider text-charcoal">
+                Select Time
+              </label>
+              <span id="pd-selected-time-label" class="text-xs font-bold text-olive">11:30 am</span>
+            </div>
+            <div id="pd-times-grid" class="flex flex-wrap gap-2">
+              <!-- Populated dynamically with the 5 time slots -->
+            </div>
+          </div>
+
+          <!-- QUANTITY STEPPER (- / +), "2 in stock" BADGE, "Add to cart" & "Chat on WhatsApp" -->
+          <div class="pt-2 border-t border-terracotta/15 space-y-3.5">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <!-- Quantity Stepper -->
+              <div class="inline-flex items-center bg-cream rounded-2xl border border-terracotta/25 p-1 shadow-2xs">
+                <button
+                  type="button"
+                  onclick="stepProductQty(-1)"
+                  aria-label="Decrease quantity"
+                  class="w-9 h-9 rounded-xl bg-sand hover:bg-terracotta hover:text-cream text-charcoal font-bold text-lg flex items-center justify-center transition-colors"
+                >
+                  -
+                </button>
+                <span id="pd-qty-value" class="w-11 text-center font-bold text-sm sm:text-base text-charcoal">
+                  1
+                </span>
+                <button
+                  type="button"
+                  onclick="stepProductQty(1)"
+                  aria-label="Increase quantity"
+                  class="w-9 h-9 rounded-xl bg-sand hover:bg-terracotta hover:text-cream text-charcoal font-bold text-lg flex items-center justify-center transition-colors"
+                >
+                  +
+                </button>
+              </div>
+
+              <!-- "2 in stock" Status Pill -->
+              <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-terracotta/12 border border-terracotta/25">
+                <span class="w-2 h-2 rounded-full bg-terracotta animate-pulse"></span>
+                <span id="pd-stock-badge" class="text-xs font-extrabold text-terracotta">2 in stock</span>
+              </div>
+
+              <!-- Live Subtotal Preview Hint -->
+              <div class="text-right ml-auto">
+                <span class="block text-[10px] uppercase tracking-wider text-charcoal/65 font-semibold">Session Subtotal</span>
+                <span id="pd-live-subtotal" class="font-serif font-bold text-xl text-charcoal">₹800.00</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons: Add to cart + Chat on WhatsApp -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <button
+                type="button"
+                onclick="addCurrentProductToCart()"
+                class="w-full py-3.5 px-5 rounded-2xl bg-terracotta hover:bg-terracottaLight text-cream font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all active:scale-98 flex items-center justify-center gap-2"
+              >
+                <span>🛒 Add to cart</span>
+              </button>
+
+              <button
+                type="button"
+                onclick="chatOnWhatsAppForProduct()"
+                class="w-full py-3.5 px-5 rounded-2xl bg-olive hover:bg-oliveLight text-cream font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all active:scale-98 flex items-center justify-center gap-2"
+              >
+                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+                </svg>
+                <span>Chat on WhatsApp</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================== SUBTLE SCROLL-CHOREOGRAPHED WORKSHOP STORY & POLICY CARDS ==================== -->
+      <div class="mt-10 sm:mt-14">
+        <div class="text-center max-w-xl mx-auto mb-7">
+          <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-terracotta">Curated Studio Experience</span>
+          <h2 class="font-serif font-bold text-2xl sm:text-4xl text-charcoal mt-1">
+            Everything About Your Session
+          </h2>
+        </div>
+
+        <div class="product-details-bento">
+
+          <!-- Card 1: What You’ll Do -->
+          <article class="product-scroll-card bg-sand/90 rounded-[28px] p-5 sm:p-6 border border-terracotta/20 shadow-xs">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-serif font-bold text-2xl text-charcoal">What You’ll Do</h3>
+              <span class="w-9 h-9 rounded-2xl bg-terracotta/15 text-terracotta flex items-center justify-center text-lg">🏺</span>
+            </div>
+            <svg viewBox="0 0 240 8" class="w-36 h-2 mt-1 text-terracotta">
+              <path class="sketch-underline" d="M2,5 Q80,1 160,5 T236,4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+            <ul id="pd-what-youll-do" class="mt-4 space-y-2.5 text-xs sm:text-sm font-medium text-charcoal/90">
+              <!-- Populated dynamically -->
+            </ul>
+          </article>
+
+          <!-- Card 2: What’s Included -->
+          <article class="product-scroll-card bg-sand/90 rounded-[28px] p-5 sm:p-6 border border-terracotta/20 shadow-xs">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-serif font-bold text-2xl text-charcoal">What’s Included</h3>
+              <span class="w-9 h-9 rounded-2xl bg-olive/15 text-olive flex items-center justify-center text-lg">✦</span>
+            </div>
+            <svg viewBox="0 0 240 8" class="w-36 h-2 mt-1 text-olive">
+              <path class="sketch-underline" d="M2,5 Q80,1 160,5 T236,4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+            <ul id="pd-whats-included" class="mt-4 space-y-2 text-xs sm:text-sm font-medium text-charcoal/90">
+              <!-- Populated dynamically -->
+            </ul>
+          </article>
+
+          <!-- Card 3: Take-Home Details & Optional Glazing -->
+          <article class="product-scroll-card bg-sand/90 rounded-[28px] p-5 sm:p-6 border border-terracotta/20 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="font-serif font-bold text-2xl text-charcoal">Take-Home Details</h3>
+                <span class="w-9 h-9 rounded-2xl bg-ochre/20 text-charcoal flex items-center justify-center text-lg">□</span>
+              </div>
+              <svg viewBox="0 0 240 8" class="w-36 h-2 mt-1 text-terracotta">
+                <path class="sketch-underline" d="M2,5 Q80,1 160,5 T236,4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+              <ul id="pd-take-home" class="mt-4 space-y-2.5 text-xs sm:text-sm font-medium text-charcoal/90">
+                <!-- Populated dynamically -->
+              </ul>
+            </div>
+
+            <!-- Optional Add-on Highlight Box -->
+            <div class="mt-5 pt-3.5 border-t border-terracotta/15 bg-cream/85 rounded-2xl p-3.5">
+              <span class="block text-[10px] font-extrabold uppercase tracking-wider text-terracotta mb-1">Optional</span>
+              <p id="pd-optional-note" class="text-xs sm:text-sm font-semibold text-olive">
+                ✧ Glazing and firing available at additional charges
+              </p>
+            </div>
+          </article>
+
+          <!-- Card 4: Perfect For -->
+          <article class="product-scroll-card bg-sand/90 rounded-[28px] p-5 sm:p-6 border border-terracotta/20 shadow-xs">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-serif font-bold text-2xl text-charcoal">Perfect For</h3>
+              <span class="w-9 h-9 rounded-2xl bg-terracotta/15 text-terracotta flex items-center justify-center text-lg">♡</span>
+            </div>
+            <svg viewBox="0 0 240 8" class="w-36 h-2 mt-1 text-terracotta">
+              <path class="sketch-underline" d="M2,5 Q80,1 160,5 T236,4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+            <ul id="pd-perfect-for" class="mt-4 space-y-2.5 text-xs sm:text-sm font-medium text-charcoal/90">
+              <!-- Populated dynamically -->
+            </ul>
+          </article>
+
+        </div>
+
+        <!-- Card 5: Full-Width Refund & Rescheduling Policy Card -->
+        <article class="product-scroll-card mt-5 bg-sand/95 rounded-[28px] p-5 sm:p-7 border border-terracotta/25 shadow-xs">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-terracotta/15">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-terracotta">Refund Policy</span>
+              <h3 class="font-serif font-bold text-2xl sm:text-3xl text-charcoal">Refund &amp; Rescheduling Policy</h3>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-cream text-olive text-xs font-bold border border-olive/20 self-start sm:self-auto">
+              Transparent Creator Policy
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+            <div class="p-3.5 rounded-2xl bg-cream/90 border border-terracotta/15">
+              <span class="text-terracotta font-bold text-sm">◌ 48+ Hours Before Session</span>
+              <p class="font-serif font-bold text-xl text-olive mt-0.5">Full Refund</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-cream/90 border border-terracotta/15">
+              <span class="text-terracotta font-bold text-sm">◌ 24 Hours Before Session</span>
+              <p class="font-serif font-bold text-xl text-ochre mt-0.5">50% Refund</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-cream/90 border border-terracotta/15">
+              <span class="text-terracotta font-bold text-sm">◌ Same Day Cancellation</span>
+              <p class="font-serif font-bold text-xl text-charcoal/70 mt-0.5">No Refund</p>
+            </div>
+          </div>
+
+          <p class="mt-4 text-xs sm:text-sm font-medium text-charcoal/85 bg-ochre/15 px-4 py-3 rounded-2xl border border-ochre/30">
+            ✧ Rescheduling is allowed only in exceptional cases and can be shifted to any available weekday session, subject to prior approval.
+          </p>
+        </article>
+      </div>
+
+    </section>
+
+    <!-- Bottom-Left Botanical Olive Leaf Sprig -->
+    <div id="decor-leaf-bl" class="pointer-events-none absolute bottom-6 -left-3 w-20 sm:w-32 z-0 select-none opacity-45 sm:opacity-70 origin-bottom-left will-change-transform">
+      <svg viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M-5,185 C22,145 48,95 65,20" stroke="#3A4624" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M52,65 C35,52 32,30 44,16 C56,28 58,48 52,65 Z" fill="#4E5B33" opacity="0.9"/>
+        <path d="M55,60 C72,62 92,50 98,34 C80,32 64,44 55,60 Z" fill="#3A4624" opacity="0.85"/>
+        <path d="M35,112 C18,98 14,74 26,58 C40,72 42,94 35,112 Z" fill="#3A4624" opacity="0.88"/>
+      </svg>
+    </div>
+
+    <!-- Bottom-Right Terracotta Dry-Brush Wash -->
+    <div id="decor-corner-br" class="pointer-events-none absolute -bottom-6 -right-8 w-36 sm:w-60 z-0 select-none opacity-55 sm:opacity-80 will-change-transform">
+      <svg viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M340,280 L80,280 C125,220 185,150 250,85 C285,50 315,20 340,-10 Z" fill="#C86428" opacity="0.88"/>
+        <path d="M340,280 L130,280 C175,220 225,155 280,95 C305,65 325,40 340,20 Z" fill="#A93518" opacity="0.72"/>
+      </svg>
+    </div>
+
+    <!-- Studio Footer -->
+    <footer class="relative z-10 border-t border-terracotta/15 py-7 px-4 text-center text-xs text-charcoal/75 bg-cream/80">
+      <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="font-medium">
+          <strong class="text-charcoal">STUDIO AKAAR</strong> • Create • Connect • Express — Open Tuesday–Sunday (11:00 AM – 8:00 PM)
+        </p>
+        <div class="flex items-center gap-4">
+          <button onclick="openWorkshopProductPage('wheel-pottery')" class="text-olive font-semibold hover:underline">
+            Wheel Pottery Product Page
+          </button>
+          <button onclick="openCartDrawer()" class="text-terracotta font-bold hover:underline">
+            View Studio Cart →
+          </button>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ==================== STUDIO CART & CHECKOUT DRAWER (WITH FLAT10 COUPON ENGINE) ==================== -->
+  <div
+    id="cart-drawer-backdrop"
+    onclick="closeCartDrawer()"
+    class="fixed inset-0 z-50 bg-charcoal/60 backdrop-blur-xs hidden opacity-0 transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4"
+  >
+    <div
+      id="cart-drawer-panel"
+      onclick="event.stopPropagation()"
+      class="w-full max-w-lg bg-cream rounded-t-3xl sm:rounded-3xl border-2 border-terracotta/25 shadow-2xl overflow-hidden transform translate-y-8 transition-transform duration-300 max-h-[92svh] flex flex-col"
+    >
+      <div class="px-5 py-4 bg-sand border-b border-terracotta/15 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-terracotta text-cream flex items-center justify-center font-serif font-bold text-xl">a</div>
+          <div>
+            <h3 class="font-serif font-bold text-xl text-charcoal leading-none">Your Studio Akaar Cart</h3>
+            <p class="text-[11px] text-charcoal/70 mt-0.5">Use <strong class="text-terracotta">FLAT10</strong> for 10% off on orders above ₹1500</p>
+          </div>
+        </div>
+        <button onclick="closeCartDrawer()" aria-label="Close cart" class="w-8 h-8 rounded-full bg-cream hover:bg-terracotta hover:text-cream text-charcoal flex items-center justify-center text-sm font-bold transition-colors">
+          ✕
+        </button>
+      </div>
+
+      <div id="cart-items-body" class="p-5 overflow-y-auto space-y-4 flex-1">
+        <!-- Cart Items List -->
+        <div id="cart-items-list" class="space-y-2.5"></div>
+
+        <!-- Coupon Code Input Box -->
+        <div class="bg-sand/75 p-3 rounded-2xl border border-terracotta/20">
+          <div class="flex items-center gap-2">
+            <input
+              id="cart-coupon-input"
+              type="text"
+              value="FLAT10"
+              placeholder="Enter coupon code (FLAT10)"
+              class="flex-1 px-3 py-2 rounded-xl bg-cream border border-terracotta/25 text-xs font-bold uppercase text-charcoal focus:outline-none focus:border-terracotta"
+            />
+            <button
+              type="button"
+              onclick="applyCouponInCartDrawer()"
+              class="px-4 py-2 rounded-xl bg-olive hover:bg-oliveLight text-cream text-xs font-bold transition-colors"
+            >
+              Apply
+            </button>
+          </div>
+          <p id="cart-coupon-status" class="text-[11px] font-semibold text-olive mt-1.5"></p>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="bg-sand/90 p-4 rounded-2xl border border-terracotta/15 space-y-1.5 text-xs">
+          <div class="flex justify-between text-charcoal/80">
+            <span>Subtotal</span>
+            <span id="cart-subtotal-val" class="font-bold">₹0.00</span>
+          </div>
+          <div id="cart-discount-row" class="flex justify-between text-olive font-bold hidden">
+            <span>Coupon Discount (FLAT10 - 10%)</span>
+            <span id="cart-discount-val">-₹0.00</span>
+          </div>
+          <div class="flex justify-between text-base font-bold text-terracotta pt-2 border-t border-terracotta/15">
+            <span>Total Payable</span>
+            <span id="cart-total-val" class="font-serif text-2xl">₹0.00</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+          <button
+            type="button"
+            onclick="checkoutViaWhatsApp()"
+            class="py-3 px-4 rounded-2xl bg-olive hover:bg-oliveLight text-cream font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <span>💬 Confirm on WhatsApp</span>
+          </button>
+          <button
+            type="button"
+            onclick="completeInstantStudioCheckout()"
+            class="py-3 px-4 rounded-2xl bg-terracotta hover:bg-terracottaLight text-cream font-bold text-xs shadow-md"
+          >
+            Confirm Slot Pass →
+          </button>
+        </div>
+      </div>
+
+      <!-- Instant Confirmation View -->
+      <div id="cart-confirmed-view" class="hidden p-6 text-center space-y-4">
+        <div class="w-16 h-16 rounded-full bg-olive text-cream mx-auto flex items-center justify-center text-2xl shadow-md">
+          ✓
+        </div>
+        <h4 class="font-serif font-bold text-3xl text-terracotta">Studio Slot Reserved!</h4>
+        <p id="cart-confirmed-summary" class="text-xs sm:text-sm text-charcoal/85 max-w-md mx-auto leading-relaxed"></p>
+        <div class="p-3.5 rounded-2xl bg-sand border border-terracotta/20 text-xs text-charcoal space-y-1">
+          <p class="font-bold">🏺 All Materials &amp; Safe Take-Home Packaging Included</p>
+          <p class="text-charcoal/75">Show this confirmation at Studio Akaar.</p>
+        </div>
+        <button onclick="resetCartAfterCheckout()" class="px-6 py-2.5 rounded-xl bg-charcoal text-cream text-xs font-bold">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================================
+    // 1. ALL 11 STUDIO AKAAR WORKSHOPS (BACKEND-READY DATA STORE)
+    // ============================================================================
+    const STUDIO_DATES = [
+      'Wed 14 Oct 2026',
+      'Thu 15 Oct 2026',
+      'Fri 16 Oct 2026',
+      'Sat 17 Oct 2026',
+      'Sun 18 Oct 2026',
+      'Wed 21 Oct 2026',
+      'Thu 22 Oct 2026',
+      'Fri 23 Oct 2026',
+      'Sat 24 Oct 2026',
+      'Sun 25 Oct 2026'
+    ];
+
+    const STUDIO_TIMES = [
+      '11:30 am',
+      '1:00 pm',
+      '3:00 pm',
+      '4:30 pm',
+      '6:15 pm'
+    ];
+
+    const INITIAL_WORKSHOPS = [
+      {
+        id: 'wheel-pottery',
+        title: 'Wheel Pottery',
+        description: 'Learn the art of wheel throwing and create your own ceramic masterpiece.',
+        productDescription: 'Experience the calm of working on the pottery wheel—shape clay, center it, and create your own ceramic pieces with expert guidance.',
+        category: 'clay',
+        originalPrice: 1000,
+        price: 800,
+        stock: 2,
+        duration: '75 Minutes session',
+        audience: 'Age 12+ Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'WHEEL • THROWING • CERAMIC •',
+        icon: '🏺',
+        maskClass: 'organic-photo-mask-1',
+        accent: 'terracotta',
+        tags: ['Potter’s Wheel', 'Centering & Pulling', '2 Ceramic Pieces'],
+        image: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          {
+            url: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=80',
+            caption: '01 • Centering & Shaping on the Wheel'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80',
+            caption: '02 • Pulling Walls & Forming Bowls'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=1000&q=80',
+            caption: '03 • Surface Detailing & Finishing'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=1000&q=80',
+            caption: '04 • Your Handcrafted Take-Home Vessels'
+          }
+        ],
+        whatYoullDo: [
+          '🏺 Learn wheel throwing basics',
+          '🏺 Create 2 unique pottery pieces',
+          '🏺 Explore simple bowls and free-form designs'
+        ],
+        whatsIncluded: [
+          '✦ Pottery wheel access',
+          '✦ Premium white stoneware clay',
+          '✦ Tools and apron',
+          '✦ Step-by-step guidance',
+          '✦ Beginner-friendly setup'
+        ],
+        takeHomeDetails: [
+          '□ Take your unfired pieces home once dried',
+          '□ Safe packaging provided',
+          '□ Maximum size: 8 inches per piece'
+        ],
+        optionalNote: '✧ Glazing and firing available at additional charges',
+        perfectFor: [
+          '♡ Beginners',
+          '♡ Date outings and friends',
+          '♡ Mindful creative experiences',
+          '♡ Artists needing studio practice'
+        ]
+      },
+      {
+        id: 'canvas-painting',
+        title: 'Canvas Painting',
+        description: 'Learn painting techniques and create your own beautiful acrylic painting',
+        productDescription: 'Unwind with brush in hand—learn color mixing, layering, and expressive brushwork to paint your own textured acrylic canvas with step-by-step guidance.',
+        category: 'painting',
+        originalPrice: 1200,
+        price: 950,
+        stock: 4,
+        duration: '90 Minutes session',
+        audience: 'Age 8+ & Adults Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'ACRYLIC • CANVAS • BRUSHWORK •',
+        icon: '🎨',
+        maskClass: 'organic-photo-mask-3',
+        accent: 'olive',
+        tags: ['Stretched Canvas', 'Acrylic Techniques', 'Ready to Hang'],
+        image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80', caption: '01 • Palette Mixing & Acrylic Layering' },
+          { url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80', caption: '02 • Expressive Brushwork & Texture' },
+          { url: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1000&q=80', caption: '03 • Guided Studio Easel Setup' },
+          { url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80', caption: '04 • Take Home Your Finished Canvas' }
+        ]
+      },
+      {
+        id: 'clay-fridge-magnets',
+        title: 'Clay Fridge Magnets',
+        description: 'Create your own adorable handmade clay fridge magnets.',
+        productDescription: 'Sculpt, texture, and paint a set of charming miniature clay fridge magnets—from botanicals and food miniatures to quirky characters.',
+        category: 'clay',
+        originalPrice: 950,
+        price: 750,
+        stock: 5,
+        duration: '75 Minutes session',
+        audience: 'Kids & Adults Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'HANDMADE • MINIATURE • CLAY •',
+        icon: '🧲',
+        maskClass: 'organic-photo-mask-5',
+        accent: 'ochre',
+        tags: ['Miniature Sculpting', 'Vibrant Painting', 'Set of Custom Magnets'],
+        image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80', caption: '01 • Hand-Sculpting Miniature Forms' },
+          { url: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=80', caption: '02 • Detailing & Surface Texturing' },
+          { url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80', caption: '03 • Painting & Protective Varnish' },
+          { url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80', caption: '04 • Ready-to-Stick Magnet Collection' }
+        ]
+      },
+      {
+        id: 'led-moon-lamp',
+        title: 'LED Moon Lamp',
+        description: 'Design and paint your own glowing artistic decorative moon lamp.',
+        productDescription: 'Craft a tactile cratered moon surface using sculptural texture paste and warm pigments on an illuminated LED globe that glows in your room.',
+        category: 'craft',
+        originalPrice: 1400,
+        price: 1150,
+        stock: 3,
+        duration: '90 Minutes session',
+        audience: 'Age 10+ & Adults Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'GLOWING • CRATER • MOON LAMP •',
+        icon: '🌙',
+        maskClass: 'organic-photo-mask-2',
+        accent: 'ochre',
+        tags: ['Crater Texture Paste', 'Warm LED Globe', 'Magical Room Decor'],
+        image: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?auto=format&fit=crop&w=1000&q=80', caption: '01 • Sculpting Lunar Craters & Ridges' },
+          { url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80', caption: '02 • Sponge Shading & Metallic Wash' },
+          { url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80', caption: '03 • Testing Warm & Cool Glow Modes' },
+          { url: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?auto=format&fit=crop&w=1000&q=80', caption: '04 • Complete with Wooden Stand' }
+        ]
+      },
+      {
+        id: 'clay-art-ceramic-mug',
+        title: 'Clay art on Ceramic Mug',
+        description: 'Design and decorate a simple mug into a unique clay art piece to take home.',
+        productDescription: 'Personalize a classic ceramic mug with 3D sculpted clay relief motifs—flowers, cozy characters, or custom initials—and paint it in your signature palette.',
+        category: 'clay',
+        originalPrice: 1100,
+        price: 899,
+        stock: 4,
+        duration: '75 Minutes session',
+        audience: 'All Ages Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'CERAMIC MUG • 3D CLAY RELIEF •',
+        icon: '☕',
+        maskClass: 'organic-photo-mask-4',
+        accent: 'terracotta',
+        tags: ['3D Mug Appliqué', 'Custom Handle & Motif', 'Personalized Keepsake'],
+        image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=1000&q=80', caption: '01 • Designing 3D Clay Mug Motifs' },
+          { url: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=80', caption: '02 • Bonding & Sculpting Relief Details' },
+          { url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80', caption: '03 • Hand-Painting & Sealing' },
+          { url: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=1000&q=80', caption: '04 • Your Custom Ceramic Mug' }
+        ]
+      },
+      {
+        id: 'starry-night-canvas',
+        title: 'Starry Night on Canvas',
+        description: 'Discover the beauty of mending pottery with golden kintsugi techniques.',
+        productDescription: 'Combine luminous starry-sky impasto brushwork with shimmering golden kintsugi-inspired metallic seams on canvas for a breathtaking wall piece.',
+        category: 'painting',
+        originalPrice: 1350,
+        price: 1099,
+        stock: 3,
+        duration: '90 Minutes session',
+        audience: 'Age 12+ Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'STARRY NIGHT • GOLDEN SEAMS •',
+        icon: '✨',
+        maskClass: 'organic-photo-mask-1',
+        accent: 'olive',
+        tags: ['Swirling Impasto Sky', 'Golden Kintsugi Accents', 'Guided Masterclass'],
+        image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80', caption: '01 • Swirling Midnight Sky Impasto' },
+          { url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80', caption: '02 • Golden Kintsugi Seam Detailing' },
+          { url: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1000&q=80', caption: '03 • Luminous Highlights & Texture' },
+          { url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80', caption: '04 • Ready-to-Display Masterpiece' }
+        ]
+      },
+      {
+        id: 'terracotta-clay-modelling',
+        title: 'Terracotta Clay Modelling',
+        description: 'Create rustic clay art using natural terracotta hand building techniques.',
+        productDescription: 'Connect with raw, breathable earth—learn traditional pinch, coil, and slab hand-building techniques using natural terracotta clay.',
+        category: 'clay',
+        originalPrice: 1100,
+        price: 850,
+        stock: 3,
+        duration: '75 Minutes session',
+        audience: 'Age 8+ & Adults Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'RAW EARTH • TERRACOTTA • FORM •',
+        icon: '🏺',
+        maskClass: 'organic-photo-mask-2',
+        accent: 'terracotta',
+        tags: ['100% Natural Terracotta', 'Coil, Slab & Pinch', 'Earthy Relief Art'],
+        image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80', caption: '01 • Coiling & Slab Hand-Building' },
+          { url: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=80', caption: '02 • Botanical & Geometric Carving' },
+          { url: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=1000&q=80', caption: '03 • White Slip Brushwork Accents' },
+          { url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80', caption: '04 • Rustic Terracotta Creations' }
+        ]
+      },
+      {
+        id: 'paint-tote-coasters-platter',
+        title: 'Paint :Tote Bags Coasters Platter Tray',
+        description: 'Paint tote bags, coasters, platters, and trays your way!',
+        productDescription: 'Turn everyday functional pieces into wearable and table-ready art! Choose from heavy cotton tote bags, wooden coasters, or serving platters.',
+        category: 'painting',
+        originalPrice: 1000,
+        price: 799,
+        stock: 6,
+        duration: '75 Minutes session',
+        audience: 'All Ages Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'TOTE • COASTERS • PLATTER TRAY •',
+        icon: '👜',
+        maskClass: 'organic-photo-mask-5',
+        accent: 'olive',
+        tags: ['Cotton Tote Bags', 'Wooden Coasters & Trays', 'Everyday Art'],
+        image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1000&q=80', caption: '01 • Custom Botanical & Abstract Motifs' },
+          { url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80', caption: '02 • Fabric & Wood Pigment Techniques' },
+          { url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80', caption: '03 • Sealing Coasters & Platter Trays' },
+          { url: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1000&q=80', caption: '04 • Take Home Your Functional Art' }
+        ]
+      },
+      {
+        id: 'kintsugi-workshop',
+        title: 'Kintsugi Workshop',
+        description: 'Discover the ancient Japanese art of repairing broken pottery with golden seams',
+        productDescription: 'Embrace the philosophy of wabi-sabi—mend fractured ceramic vessels using golden lacquer seams to celebrate resilience and imperfection.',
+        category: 'craft',
+        originalPrice: 1600,
+        price: 1299,
+        stock: 2,
+        duration: '90 Minutes session',
+        audience: 'Age 12+ Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'KINTSUGI • GOLDEN JOINERY •',
+        icon: '💛',
+        maskClass: 'organic-photo-mask-3',
+        accent: 'ochre',
+        tags: ['Japanese Philosophy', 'Gold Dust Joinery', 'Ceramic Bowl Included'],
+        image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=1000&q=80', caption: '01 • Mindful Ceramic Joinery Prep' },
+          { url: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=80', caption: '02 • Tracing Golden Veins & Seams' },
+          { url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80', caption: '03 • Dusting Mica Gold & Polishing' },
+          { url: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=1000&q=80', caption: '04 • Your Kintsugi Keepsake Vessel' }
+        ]
+      },
+      {
+        id: 'resin-jewellery',
+        title: 'Resin Jewellery',
+        description: 'Craft stunning resin jewellery with flowers and textures that tell your story.',
+        productDescription: 'Preserve delicate pressed botanicals, gold leaf, and pearlescent pigments inside crystal-clear resin bezels to craft wearable pendants and earrings.',
+        category: 'craft',
+        originalPrice: 1400,
+        price: 1099,
+        stock: 4,
+        duration: '90 Minutes session',
+        audience: 'Age 12+ Beginner Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'BOTANICAL • RESIN • JEWELLERY •',
+        icon: '🌸',
+        maskClass: 'organic-photo-mask-4',
+        accent: 'terracotta',
+        tags: ['Pressed Dried Flowers', 'Pendants & Earrings', 'Gold Foil & Pigments'],
+        image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80', caption: '01 • Curating Pressed Botanicals & Foils' },
+          { url: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=80', caption: '02 • Pouring & Curing Botanical Resin' },
+          { url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80', caption: '03 • Attaching Chains & Earring Hooks' },
+          { url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80', caption: '04 • Custom Jewellery Set to Take Home' }
+        ]
+      },
+      {
+        id: 'bedazzling-workshop',
+        title: 'Bedazzling Workshop',
+        description: 'Transform an everyday hairbrush or mini canvas into sparkling keepsakes with beads, pearls, rhinestones, and your own creative touch.',
+        productDescription: 'Add high-craft sparkle to everyday keepsakes—arrange pearls, faceted rhinestones, charms, and beads onto a hairbrush or mini canvas.',
+        category: 'craft',
+        originalPrice: 1100,
+        price: 899,
+        stock: 5,
+        duration: '75 Minutes session',
+        audience: 'Kids, Teens & Adults Friendly',
+        materialsNote: 'All Materials Included',
+        stampText: 'PEARLS • RHINESTONES • SPARKLE •',
+        icon: '💎',
+        maskClass: 'organic-photo-mask-5',
+        accent: 'ochre',
+        tags: ['Hairbrush or Mini Canvas', 'Pearls & Rhinestones', 'Sparkling Keepsake'],
+        image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80',
+        gallery: [
+          { url: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=80', caption: '01 • Selecting Pearls, Gems & Charms' },
+          { url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80', caption: '02 • Precision Gem Placement Tools' },
+          { url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80', caption: '03 • Customizing Hairbrush or Mini Canvas' },
+          { url: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=80', caption: '04 • Your Sparkling Studio Keepsake' }
+        ]
+      }
+    ];
+
+    let workshopsData = JSON.parse(JSON.stringify(INITIAL_WORKSHOPS));
+    let activeCategoryFilter = 'all';
+    // Track per-card photo slide index on Home page
+    const homeCardSlideIndex = {};
+
+    // Expose Clean Backend API for adding/removing/setting workshops programmatically
+    window.StudioAkaarBackend = {
+      getWorkshops: () => [...workshopsData],
+      setWorkshops: (nextList) => {
+        if (Array.isArray(nextList) && nextList.length > 0) {
+          workshopsData = nextList;
+          renderAllWorkshopViews();
+        }
+      },
+      addWorkshop: (workshopObj) => {
+        workshopsData.push(workshopObj);
+        renderAllWorkshopViews();
+      },
+      removeWorkshop: (id) => {
+        workshopsData = workshopsData.filter(w => w.id !== id);
+        renderAllWorkshopViews();
+      }
+    };
+
+    // ============================================================================
+    // 2. RENDER HOME WORKSHOPS, QUICK-JUMP REEL & PRODUCT PAGE SWITCHER
+    // ============================================================================
+    function renderAllWorkshopViews() {
+      const stage = document.getElementById('workshops-stage');
+      const reel = document.getElementById('story-reel-container');
+      const productSwitcher = document.getElementById('product-workshop-switcher');
+
+      const countEl = document.getElementById('pill-count-all');
+      if (countEl) countEl.textContent = workshopsData.length;
+
+      // 1. Render Top Quick-Jump Reel (Opens that workshop's dedicated Product Page)
+      if (reel) {
+        reel.innerHTML = workshopsData.map((ws, idx) => {
+          const num = String(idx + 1).padStart(2, '0');
+          return `
+            <button
+              onclick="openWorkshopProductPage('${ws.id}')"
+              class="snap-start shrink-0 flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-sand hover:bg-sandDark border border-terracotta/25 shadow-2xs transition-transform active:scale-95"
+            >
+              <img
+                src="${ws.image}"
+                onerror="this.onerror=null;this.src='https://placehold.co/120x120/A93518/FAF3EB?text=Art';"
+                alt="${ws.title}"
+                class="w-8 h-8 rounded-full object-cover border-2 border-terracotta shrink-0"
+              />
+              <div class="text-left leading-tight">
+                <span class="block text-[9px] font-bold uppercase text-terracotta">${num} • ₹${ws.price}</span>
+                <span class="block text-[11px] font-bold text-charcoal max-w-[120px] truncate">${ws.title}</span>
+              </div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. Filter & Render Vertical Scroll Workshop Cards on Home Page
+      const filtered = workshopsData.filter(ws =>
+        activeCategoryFilter === 'all' ? true : ws.category === activeCategoryFilter
+      );
+
+      if (stage) {
+        stage.innerHTML = filtered.map((ws, idx) => {
+          const num = String(idx + 1).padStart(2, '0');
+          const badgeBg =
+            ws.accent === 'olive' ? 'bg-olive text-cream' :
+            ws.accent === 'ochre' ? 'bg-ochre text-charcoal' :
+            'bg-terracotta text-cream';
+
+          const meterBg =
+            ws.accent === 'olive' ? 'bg-olive' :
+            ws.accent === 'ochre' ? 'bg-ochre' :
+            'bg-terracotta';
+
+          const slides = ws.gallery && ws.gallery.length ? ws.gallery : [{ url: ws.image, caption: ws.title }];
+          const currentSlideIdx = homeCardSlideIndex[ws.id] || 0;
+          const activeSlide = slides[currentSlideIdx] || slides[0];
+          const escapedTitle = ws.title.replace(/'/g, "\\'");
+
+          return `
+            <article
+              id="card-${ws.id}"
+              data-workshop-id="${ws.id}"
+              class="workshop-card in-view w-full bg-sand/90 rounded-[30px] border border-terracotta/20 p-4 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between relative group overflow-hidden"
+            >
+              <div class="absolute top-0 left-0 right-0 h-1 bg-terracotta/10">
+                <div class="card-scroll-meter h-full ${meterBg} transition-all duration-75" style="width: 50%"></div>
+              </div>
+
+              <div>
+                <!-- Card Header Meta -->
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${badgeBg}">
+                    ${num} • ${ws.category.toUpperCase()}
+                  </span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-cream text-olive border border-olive/20">
+                    ${ws.audience}
+                  </span>
+                </div>
+
+                <!-- MORPHING ORGANIC CLAY MASK PHOTO STAGE WITH 3-PHOTO SWIPE -->
+                <div
+                  class="relative mx-auto w-full aspect-[4/3] my-2 flex items-center justify-center select-none"
+                  ontouchstart="handleHomeCardTouchStart(event, '${ws.id}')"
+                  ontouchend="handleHomeCardTouchEnd(event, '${ws.id}')"
+                >
+                  <div class="workshop-blob-shadow absolute inset-2 bg-ochre/25 rounded-[44%_56%_38%_62%/52%_44%_56%_48%]"></div>
+
+                  <div
+                    onclick="openWorkshopProductPage('${ws.id}')"
+                    class="workshop-photo-stage ${ws.maskClass} relative w-full h-full overflow-hidden bg-sandDark cursor-pointer"
+                  >
+                    <img
+                      id="home-card-img-${ws.id}"
+                      src="${activeSlide.url}"
+                      onerror="this.onerror=null;this.src='https://placehold.co/800x600/A93518/FAF3EB?text=' + encodeURIComponent('${escapedTitle}');"
+                      alt="${ws.title}"
+                      loading="lazy"
+                      decoding="async"
+                      class="workshop-img w-full h-full object-cover object-center"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/55 via-transparent to-transparent"></div>
+
+                    <!-- Mini Prev / Next Slide Controls inside Card -->
+                    <button
+                      type="button"
+                      onclick="event.stopPropagation(); stepHomeCardSlide('${ws.id}', -1)"
+                      aria-label="Previous slide"
+                      class="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-cream/85 hover:bg-terracotta text-charcoal hover:text-cream text-xs font-bold flex items-center justify-center shadow"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      type="button"
+                      onclick="event.stopPropagation(); stepHomeCardSlide('${ws.id}', 1)"
+                      aria-label="Next slide"
+                      class="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-cream/85 hover:bg-terracotta text-charcoal hover:text-cream text-xs font-bold flex items-center justify-center shadow"
+                    >
+                      ›
+                    </button>
+
+                    <div class="absolute bottom-3 inset-x-4 z-20 flex items-center justify-between gap-2">
+                      <span id="home-card-caption-${ws.id}" class="bg-charcoal/75 backdrop-blur-xs text-cream px-2.5 py-1 rounded-full text-[10px] font-semibold truncate">
+                        ${activeSlide.caption}
+                      </span>
+                      <span class="px-2.5 py-1 rounded-full bg-cream/95 text-terracotta text-[10px] font-extrabold shadow shrink-0">
+                        ${ws.stock} in stock
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Scroll-Rotated Floating SVG Studio Stamp -->
+                  <div class="doodle-sticker absolute -top-2.5 -right-2 z-20 w-14 h-14 sm:w-18 sm:h-18 pointer-events-none">
+                    <svg viewBox="0 0 100 100" class="w-full h-full scroll-spin-stamp">
+                      <defs>
+                        <path id="stamp-path-${ws.id}" d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
+                      </defs>
+                      <circle cx="50" cy="50" r="44" fill="#FAF3EB" stroke="#A93518" stroke-width="1.8" stroke-dasharray="4 3"/>
+                      <text fill="#A93518" font-size="8.2" font-weight="700" letter-spacing="2">
+                        <textPath href="#stamp-path-${ws.id}">${ws.stampText}</textPath>
+                      </text>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-xs sm:text-sm">${ws.icon}</span>
+                  </div>
+                </div>
+
+                <!-- Workshop Title, Pricing & Description -->
+                <div class="mt-3">
+                  <div class="flex items-start justify-between gap-2">
+                    <h3
+                      onclick="openWorkshopProductPage('${ws.id}')"
+                      class="font-serif font-bold text-2xl sm:text-3xl text-charcoal hover:text-terracotta cursor-pointer leading-tight transition-colors"
+                    >
+                      ${ws.title}
+                    </h3>
+                    <div class="text-right shrink-0">
+                      <del class="block text-[11px] text-charcoal/45 font-semibold">₹${(ws.originalPrice || ws.price + 200).toFixed(2)}</del>
+                      <span class="block font-serif font-bold text-xl sm:text-2xl text-terracotta leading-none">₹${ws.price.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <svg viewBox="0 0 280 10" class="w-40 h-2.5 mt-0.5 text-terracotta">
+                    <path class="sketch-underline" d="M2,6 Q95,2 190,6 T276,4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+
+                  <p class="text-xs sm:text-sm text-charcoal/80 mt-2 leading-relaxed">
+                    ${ws.description}
+                  </p>
+
+                  <div class="flex flex-wrap gap-1.5 mt-3">
+                    ${(ws.tags || []).map(tag => `
+                      <span class="px-2.5 py-0.5 rounded-lg text-[10.5px] font-medium bg-cream text-charcoal/85">${tag}</span>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Footer CTA (Opens Dedicated Workshop Product Page) -->
+              <div class="mt-5 pt-3 border-t border-terracotta/15 flex items-center justify-between gap-2">
+                <div class="text-[11px] font-semibold text-olive">
+                  <span>◌ ${ws.duration}</span>
+                  <span class="mx-1">•</span>
+                  <span class="text-terracotta">All Materials</span>
+                </div>
+                <button
+                  onclick="openWorkshopProductPage('${ws.id}')"
+                  class="px-4 py-2 rounded-2xl text-xs font-bold bg-terracotta hover:bg-terracottaLight text-cream shadow-xs hover:shadow transition-all active:scale-95 shrink-0"
+                >
+                  View &amp; Book Slot →
+                </button>
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+
+      // 3. Render Product Page Top Workshop Switcher Pills
+      if (productSwitcher) {
+        productSwitcher.innerHTML = workshopsData.map(ws => {
+          const isCurrent = currentProductWorkshop && currentProductWorkshop.id === ws.id;
+          return `
+            <button
+              onclick="openWorkshopProductPage('${ws.id}')"
+              class="px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all ${
+                isCurrent
+                  ? 'bg-terracotta text-cream shadow-2xs'
+                  : 'bg-sand hover:bg-sandDark text-charcoal border border-terracotta/20'
+              }"
+            >
+              ${ws.icon} ${ws.title}
+            </button>
+          `;
+        }).join('');
+      }
+
+      requestAnimationFrame(() => {
+        setupBackgroundScrollLineAndBranches();
+        updateScrollChoreography();
+      });
+    }
+
+    // Home Card 3-Photo Touch & Step Helpers
+    let homeTouchStartX = 0;
+    function handleHomeCardTouchStart(e, wsId) {
+      if (e.touches && e.touches[0]) homeTouchStartX = e.touches[0].clientX;
+    }
+    function handleHomeCardTouchEnd(e, wsId) {
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      const dx = e.changedTouches[0].clientX - homeTouchStartX;
+      if (Math.abs(dx) > 36) {
+        stepHomeCardSlide(wsId, dx < 0 ? 1 : -1);
+      }
+    }
+    function stepHomeCardSlide(wsId, delta) {
+      const ws = workshopsData.find(w => w.id === wsId);
+      if (!ws || !ws.gallery) return;
+      const len = ws.gallery.length;
+      const nextIdx = ((homeCardSlideIndex[wsId] || 0) + delta + len) % len;
+      homeCardSlideIndex[wsId] = nextIdx;
+      const slide = ws.gallery[nextIdx];
+      const imgEl = document.getElementById(`home-card-img-${wsId}`);
+      const capEl = document.getElementById(`home-card-caption-${wsId}`);
+      if (imgEl && slide) imgEl.src = slide.url;
+      if (capEl && slide) capEl.textContent = slide.caption;
+    }
+
+    function filterWorkshops(category) {
+      activeCategoryFilter = category;
+      document.querySelectorAll('.category-pill').forEach(btn => {
+        if (btn.dataset.filter === category) {
+          btn.className = 'category-pill px-3.5 py-1.5 rounded-xl text-xs font-bold bg-terracotta text-cream shadow-2xs whitespace-nowrap transition-all';
+        } else {
+          btn.className = 'category-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-cream/85 hover:bg-cream text-charcoal whitespace-nowrap transition-all';
+        }
+      });
+      renderAllWorkshopViews();
+    }
+
+    // ============================================================================
+    // 3. DEDICATED WORKSHOP PRODUCT PAGE ENGINE (FEATURED: WHEEL POTTERY)
+    // ============================================================================
+    let currentProductWorkshop = workshopsData[0];
+    let currentProductSlideIdx = 0;
+    let selectedProductDate = STUDIO_DATES[0]; // 'Wed 14 Oct 2026'
+    let selectedProductTime = STUDIO_TIMES[0]; // '11:30 am'
+    let selectedProductQty = 1;
+
+    function switchToHomeView() {
+      document.getElementById('product-view').classList.add('hidden');
+      document.getElementById('home-view').classList.remove('hidden');
+
+      document.getElementById('nav-btn-home').className =
+        'px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-terracotta text-cream transition-all';
+      document.getElementById('nav-btn-product').className =
+        'px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-semibold text-charcoal hover:bg-cream/80 transition-all flex items-center gap-1';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      requestAnimationFrame(() => updateScrollChoreography());
+    }
+
+    function openWorkshopProductPage(workshopId) {
+      const ws = workshopsData.find(w => w.id === workshopId) || workshopsData[0];
+      currentProductWorkshop = ws;
+      currentProductSlideIdx = 0;
+      selectedProductQty = 1;
+
+      // Switch visible view
+      document.getElementById('home-view').classList.add('hidden');
+      document.getElementById('product-view').classList.remove('hidden');
+
+      document.getElementById('nav-btn-product').className =
+        'px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-terracotta text-cream transition-all flex items-center gap-1';
+      document.getElementById('nav-btn-home').className =
+        'px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-semibold text-charcoal hover:bg-cream/80 transition-all';
+
+      populateProductPageContent(ws);
+      renderAllWorkshopViews();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      requestAnimationFrame(() => updateScrollChoreography());
+    }
+
+    function populateProductPageContent(ws) {
+      // Header, Pricing & Description
+      document.getElementById('pd-title').textContent = ws.title;
+      document.getElementById('pd-original-price').textContent = `₹${(ws.originalPrice || 1000).toFixed(2)}`;
+      document.getElementById('pd-sale-price').textContent = `₹${ws.price.toFixed(2)}`;
+      document.getElementById('pd-description').textContent = ws.productDescription || ws.description;
+
+      // 3 Highlights
+      document.getElementById('pd-highlight-1').textContent = ws.duration || '75 Minutes session';
+      document.getElementById('pd-highlight-2').textContent = ws.audience || 'Age 12+ Beginner Friendly';
+      document.getElementById('pd-highlight-3').textContent = ws.materialsNote || 'All Materials Included';
+
+      // Stamp & Mask
+      document.getElementById('product-stamp-textpath').textContent = ws.stampText || 'STUDIO AKAAR • HANDCRAFTED •';
+      document.getElementById('product-stamp-icon').textContent = ws.icon || '🏺';
+      const maskBox = document.getElementById('product-carousel-mask-box');
+      maskBox.className = `${ws.maskClass || 'organic-photo-mask-1'} relative w-full h-full overflow-hidden bg-sandDark shadow-inner`;
+
+      // Stock & Quantity
+      document.getElementById('pd-stock-badge').textContent = `${ws.stock || 2} in stock`;
+      document.getElementById('pd-qty-value').textContent = selectedProductQty;
+      updateProductSubtotalDisplay();
+
+      // Render Carousel & Thumbnails
+      renderProductCarouselState();
+
+      // Render 10 Dates
+      renderProductDatePills();
+
+      // Render 5 Times
+      renderProductTimePills();
+
+      // Populate Scroll-Animated Detail Cards (With Verbatim Wheel Pottery items or tailored workshop fallbacks)
+      const whatYoullDo = ws.whatYoullDo || [
+        `${ws.icon} Learn foundational ${ws.title.toLowerCase()} techniques`,
+        `${ws.icon} Create your own personalized studio artwork`,
+        `${ws.icon} Explore textures, palettes, and guided finishing`
+      ];
+      const whatsIncluded = ws.whatsIncluded || [
+        '✦ Dedicated studio workstation access',
+        '✦ Premium artist-grade materials & clay/canvas',
+        '✦ All studio tools and protective apron',
+        '✦ Step-by-step expert artist guidance',
+        '✦ Beginner-friendly setup'
+      ];
+      const takeHome = ws.takeHomeDetails || [
+        '□ Take your handcrafted creation home after the session',
+        '□ Safe studio packaging provided',
+        '□ Care & display guide included'
+      ];
+      const optionalNote = ws.optionalNote || '✧ Glazing, framing, or protective resin coating available at additional charges';
+      const perfectFor = ws.perfectFor || [
+        '♡ Beginners',
+        '♡ Date outings and friends',
+        '♡ Mindful creative experiences',
+        '♡ Artists needing studio practice'
+      ];
+
+      document.getElementById('pd-what-youll-do').innerHTML = whatYoullDo.map(item => `
+        <li class="flex items-start gap-2.5 p-2.5 rounded-2xl bg-cream/85 border border-terracotta/10">
+          <span>${item}</span>
+        </li>
+      `).join('');
+
+      document.getElementById('pd-whats-included').innerHTML = whatsIncluded.map(item => `
+        <li class="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cream/85 border border-olive/15">
+          <span>${item}</span>
+        </li>
+      `).join('');
+
+      document.getElementById('pd-take-home').innerHTML = takeHome.map(item => `
+        <li class="flex items-start gap-2.5 p-2.5 rounded-2xl bg-cream/85 border border-terracotta/10">
+          <span>${item}</span>
+        </li>
+      `).join('');
+
+      document.getElementById('pd-optional-note').textContent = optionalNote;
+
+      document.getElementById('pd-perfect-for').innerHTML = perfectFor.map(item => `
+        <li class="flex items-center gap-2.5 p-2.5 rounded-2xl bg-cream/85 border border-terracotta/10">
+          <span>${item}</span>
+        </li>
+      `).join('');
+    }
+
+    function renderProductCarouselState() {
+      const ws = currentProductWorkshop;
+      const slides = ws.gallery && ws.gallery.length ? ws.gallery : [{ url: ws.image, caption: ws.title }];
+      const slide = slides[currentProductSlideIdx] || slides[0];
+
+      const mainImg = document.getElementById('product-main-carousel-img');
+      mainImg.style.opacity = '0.35';
+      setTimeout(() => {
+        mainImg.src = slide.url;
+        mainImg.alt = `${ws.title} - ${slide.caption}`;
+        mainImg.style.opacity = '1';
+      }, 90);
+
+      document.getElementById('product-slide-caption').textContent = slide.caption;
+      document.getElementById('product-slide-counter').textContent = `${currentProductSlideIdx + 1} / ${slides.length}`;
+
+      const thumbsRow = document.getElementById('product-thumbnails-row');
+      thumbsRow.innerHTML = slides.map((s, idx) => `
+        <button
+          type="button"
+          onclick="selectProductCarouselSlide(${idx})"
+          class="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 transition-all ${
+            idx === currentProductSlideIdx
+              ? 'border-terracotta scale-102 shadow-sm'
+              : 'border-transparent opacity-65 hover:opacity-100'
+          }"
+        >
+          <img src="${s.url}" alt="${s.caption}" class="w-full h-full object-cover" />
+        </button>
+      `).join('');
+    }
+
+    function stepProductCarousel(delta) {
+      const slides = currentProductWorkshop.gallery || [];
+      if (!slides.length) return;
+      currentProductSlideIdx = (currentProductSlideIdx + delta + slides.length) % slides.length;
+      renderProductCarouselState();
+    }
+
+    function selectProductCarouselSlide(idx) {
+      currentProductSlideIdx = idx;
+      renderProductCarouselState();
+    }
+
+    // Touch Swipe on Product Page Carousel
+    (function bindProductCarouselTouch() {
+      let startX = 0;
+      document.addEventListener('DOMContentLoaded', () => {
+        const stage = document.getElementById('product-carousel-touch-stage');
+        if (!stage) return;
+        stage.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches[0]) startX = e.touches[0].clientX;
+        }, { passive: true });
+        stage.addEventListener('touchend', (e) => {
+          if (!e.changedTouches || !e.changedTouches[0]) return;
+          const dx = e.changedTouches[0].clientX - startX;
+          if (Math.abs(dx) > 36) stepProductCarousel(dx < 0 ? 1 : -1);
+        }, { passive: true });
+      });
+    })();
+
+    function renderProductDatePills() {
+      document.getElementById('pd-selected-date-label').textContent = selectedProductDate;
+      const grid = document.getElementById('pd-dates-grid');
+      grid.innerHTML = STUDIO_DATES.map(d => {
+        const active = d === selectedProductDate;
+        return `
+          <button
+            type="button"
+            onclick="selectProductDate('${d}')"
+            class="px-2.5 py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all border ${
+              active
+                ? 'bg-terracotta text-cream border-terracotta shadow-xs scale-[1.01]'
+                : 'bg-cream hover:bg-sandDark/60 text-charcoal border-terracotta/20'
+            }"
+          >
+            ${d}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectProductDate(dateStr) {
+      selectedProductDate = dateStr;
+      renderProductDatePills();
+    }
+
+    function renderProductTimePills() {
+      document.getElementById('pd-selected-time-label').textContent = selectedProductTime;
+      const grid = document.getElementById('pd-times-grid');
+      grid.innerHTML = STUDIO_TIMES.map(t => {
+        const active = t === selectedProductTime;
+        return `
+          <button
+            type="button"
+            onclick="selectProductTime('${t}')"
+            class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
+              active
+                ? 'bg-olive text-cream border-olive shadow-xs scale-[1.02]'
+                : 'bg-cream hover:bg-sandDark/60 text-charcoal border-terracotta/20'
+            }"
+          >
+            ${t}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectProductTime(timeStr) {
+      selectedProductTime = timeStr;
+      renderProductTimePills();
+    }
+
+    function stepProductQty(delta) {
+      selectedProductQty = Math.max(1, Math.min(10, selectedProductQty + delta));
+      document.getElementById('pd-qty-value').textContent = selectedProductQty;
+      updateProductSubtotalDisplay();
+    }
+
+    function updateProductSubtotalDisplay() {
+      const sub = (currentProductWorkshop.price || 800) * selectedProductQty;
+      document.getElementById('pd-live-subtotal').textContent = `₹${sub.toFixed(2)}`;
+    }
+
+    // ============================================================================
+    // 4. CART DRAWER, FLAT10 COUPON ENGINE & WHATSAPP INTEGRATION
+    // ============================================================================
+    let studioCart = [];
+    let activeCouponCode = 'FLAT10';
+
+    function applyFlat10Coupon() {
+      activeCouponCode = 'FLAT10';
+      const input = document.getElementById('cart-coupon-input');
+      if (input) input.value = 'FLAT10';
+
+      // Copy FLAT10 to clipboard cleanly
+      const temp = document.createElement('textarea');
+      temp.value = 'FLAT10';
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+
+      const btn = document.getElementById('apply-flat10-btn');
+      if (btn) {
+        btn.textContent = '✓ FLAT10 Applied';
+        btn.classList.replace('bg-terracotta', 'bg-olive');
+        setTimeout(() => {
+          btn.textContent = 'Apply FLAT10';
+          btn.classList.replace('bg-olive', 'bg-terracotta');
+        }, 2200);
+      }
+    }
+
+    function addCurrentProductToCart() {
+      const ws = currentProductWorkshop;
+      const existing = studioCart.find(
+        item => item.workshopId === ws.id && item.date === selectedProductDate && item.time === selectedProductTime
+      );
+      if (existing) {
+        existing.qty += selectedProductQty;
+      } else {
+        studioCart.push({
+          id: 'item-' + Date.now(),
+          workshopId: ws.id,
+          title: ws.title,
+          price: ws.price,
+          image: ws.image,
+          date: selectedProductDate,
+          time: selectedProductTime,
+          qty: selectedProductQty
+        });
+      }
+      renderCartDrawerContents();
+      openCartDrawer();
+    }
+
+    function removeCartItem(itemId) {
+      studioCart = studioCart.filter(i => i.id !== itemId);
+      renderCartDrawerContents();
+    }
+
+    function changeCartItemQty(itemId, delta) {
+      const item = studioCart.find(i => i.id === itemId);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + delta);
+      renderCartDrawerContents();
+    }
+
+    function applyCouponInCartDrawer() {
+      const code = (document.getElementById('cart-coupon-input').value || '').trim().toUpperCase();
+      activeCouponCode = code;
+      renderCartDrawerContents();
+    }
+
+    function renderCartDrawerContents() {
+      const totalBadge = document.getElementById('header-cart-badge');
+      const totalCount = studioCart.reduce((acc, i) => acc + i.qty, 0);
+      if (totalBadge) totalBadge.textContent = totalCount;
+
+      const listEl = document.getElementById('cart-items-list');
+      if (!studioCart.length) {
+        listEl.innerHTML = `
+          <div class="p-6 rounded-2xl bg-sand/60 border border-terracotta/15 text-center space-y-2">
+            <p class="font-serif font-bold text-xl text-charcoal">Your Studio Cart is Empty</p>
+            <p class="text-xs text-charcoal/70">Select a date &amp; time on the Wheel Pottery page to reserve your wheel.</p>
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = studioCart.map(item => `
+          <div class="flex items-center justify-between gap-3 p-3 rounded-2xl bg-sand/85 border border-terracotta/20">
+            <img src="${item.image}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-terracotta/20" />
+            <div class="flex-1 min-w-0">
+              <p class="font-serif font-bold text-lg text-charcoal leading-tight truncate">${item.title}</p>
+              <p class="text-[11px] font-semibold text-olive">${item.date} • ${item.time}</p>
+              <p class="text-xs font-bold text-terracotta mt-0.5">₹${item.price.toFixed(2)} × ${item.qty} = ₹${(item.price * item.qty).toFixed(2)}</p>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="changeCartItemQty('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-cream font-bold text-xs">-</button>
+              <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+              <button onclick="changeCartItemQty('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-cream font-bold text-xs">+</button>
+              <button onclick="removeCartItem('${item.id}')" class="ml-1 text-charcoal/50 hover:text-terracotta text-xs font-bold">✕</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const subtotal = studioCart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const couponStatus = document.getElementById('cart-coupon-status');
+      const discountRow = document.getElementById('cart-discount-row');
+
+      let discount = 0;
+      if (activeCouponCode === 'FLAT10') {
+        if (subtotal > 1500) {
+          discount = Math.round(subtotal * 0.10);
+          couponStatus.textContent = `🎉 FLAT10 applied! You saved ₹${discount.toFixed(2)} (10% off order above ₹1500).`;
+          couponStatus.className = 'text-[11px] font-bold text-olive mt-1.5';
+          discountRow.classList.remove('hidden');
+        } else {
+          const needed = Math.max(0, 1501 - subtotal);
+          couponStatus.textContent = `Add ₹${needed.toFixed(0)} more (e.g. 2 seats of Wheel Pottery = ₹1600) to unlock 10% off with FLAT10!`;
+          couponStatus.className = 'text-[11px] font-semibold text-terracotta mt-1.5';
+          discountRow.classList.add('hidden');
+        }
+      } else if (activeCouponCode) {
+        couponStatus.textContent = `Invalid code. Use FLAT10 for 10% off above ₹1500.`;
+        couponStatus.className = 'text-[11px] font-semibold text-terracotta mt-1.5';
+        discountRow.classList.add('hidden');
+      } else {
+        couponStatus.textContent = '';
+        discountRow.classList.add('hidden');
+      }
+
+      const finalTotal = Math.max(0, subtotal - discount);
+      document.getElementById('cart-subtotal-val').textContent = `₹${subtotal.toFixed(2)}`;
+      document.getElementById('cart-discount-val').textContent = `-₹${discount.toFixed(2)}`;
+      document.getElementById('cart-total-val').textContent = `₹${finalTotal.toFixed(2)}`;
+    }
+
+    function openCartDrawer() {
+      renderCartDrawerContents();
+      const backdrop = document.getElementById('cart-drawer-backdrop');
+      const panel = document.getElementById('cart-drawer-panel');
+      backdrop.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        backdrop.classList.remove('opacity-0');
+        panel.classList.remove('translate-y-8');
+      });
+    }
+
+    function closeCartDrawer() {
+      const backdrop = document.getElementById('cart-drawer-backdrop');
+      const panel = document.getElementById('cart-drawer-panel');
+      backdrop.classList.add('opacity-0');
+      panel.classList.add('translate-y-8');
+      setTimeout(() => backdrop.classList.add('hidden'), 280);
+    }
+
+    function chatOnWhatsAppForProduct() {
+      const ws = currentProductWorkshop;
+      const total = ws.price * selectedProductQty;
+      const msg = `Hi Studio Akaar! I would like to book:\n• Workshop: ${ws.title}\n• Date: ${selectedProductDate}\n• Time: ${selectedProductTime}\n• Seats: ${selectedProductQty}\n• Total: ₹${total.toFixed(2)}${total > 1500 ? ' (Eligible for FLAT10 10% off!)' : ''}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function checkoutViaWhatsApp() {
+      if (!studioCart.length) return;
+      const lines = studioCart.map(i => `• ${i.title} (${i.date} at ${i.time}) × ${i.qty} = ₹${(i.price * i.qty).toFixed(2)}`).join('\n');
+      const totalText = document.getElementById('cart-total-val').textContent;
+      const msg = `Hi Studio Akaar! I'd like to confirm my workshop cart:\n${lines}\nTotal Payable: ${totalText}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function completeInstantStudioCheckout() {
+      if (!studioCart.length) {
+        addCurrentProductToCart();
+      }
+      const totalText = document.getElementById('cart-total-val').textContent;
+      const summary = studioCart.map(i => `<strong>${i.title}</strong> (${i.date} • ${i.time}, ${i.qty} seat${i.qty > 1 ? 's' : ''})`).join(', ');
+      document.getElementById('cart-items-body').classList.add('hidden');
+      document.getElementById('cart-confirmed-view').classList.remove('hidden');
+      document.getElementById('cart-confirmed-summary').innerHTML = `Reserved: ${summary}. Total Pass: <strong>${totalText}</strong>.`;
+    }
+
+    function resetCartAfterCheckout() {
+      studioCart = [];
+      document.getElementById('cart-confirmed-view').classList.add('hidden');
+      document.getElementById('cart-items-body').classList.remove('hidden');
+      renderCartDrawerContents();
+      closeCartDrawer();
+    }
+
+    // ============================================================================
+    // 5. ORIGINAL DELICATE RED LINE & SUBTLE BLOOMING GREEN BRANCHES ENGINE
+    // ============================================================================
+    const BLOOMING_BRANCH_SPOTS = [
+      { threshold: 0.06, side: 'left',  topPct: 8,  scale: 0.72, rot: 26,  flip: true,  opacity: 0.14 },
+      { threshold: 0.14, side: 'right', topPct: 15, scale: 0.80, rot: -24, flip: false, opacity: 0.16 },
+      { threshold: 0.22, side: 'left',  topPct: 23, scale: 0.68, rot: 32,  flip: true,  opacity: 0.13 },
+      { threshold: 0.30, side: 'right', topPct: 31, scale: 0.75, rot: -18, flip: false, opacity: 0.15 },
+      { threshold: 0.38, side: 'left',  topPct: 39, scale: 0.84, rot: 22,  flip: true,  opacity: 0.16 },
+      { threshold: 0.46, side: 'right', topPct: 47, scale: 0.70, rot: -28, flip: false, opacity: 0.14 },
+      { threshold: 0.54, side: 'left',  topPct: 55, scale: 0.76, rot: 29,  flip: true,  opacity: 0.15 },
+      { threshold: 0.62, side: 'right', topPct: 63, scale: 0.82, rot: -22, flip: false, opacity: 0.16 },
+      { threshold: 0.70, side: 'left',  topPct: 71, scale: 0.72, rot: 24,  flip: true,  opacity: 0.14 },
+      { threshold: 0.78, side: 'right', topPct: 79, scale: 0.78, rot: -26, flip: false, opacity: 0.15 },
+      { threshold: 0.86, side: 'left',  topPct: 87, scale: 0.74, rot: 20,  flip: true,  opacity: 0.15 },
+      { threshold: 0.93, side: 'right', topPct: 94, scale: 0.68, rot: -20, flip: false, opacity: 0.14 }
+    ];
+
+    function setupBackgroundScrollLineAndBranches() {
+      const container = document.getElementById('blooming-branches-container');
+      if (!container || container.children.length > 0) return;
+
+      container.innerHTML = BLOOMING_BRANCH_SPOTS.map((spot, idx) => {
+        const posStyle = spot.side === 'left'
+          ? `left: ${(idx % 3) * 1.5 - 1}%;`
+          : `right: ${(idx % 3) * 1.5 - 1}%;`;
+
+        const flipScale = spot.flip ? 'scaleX(-1)' : 'scaleX(1)';
+
+        return `
+          <div
+            data-bloom-threshold="${spot.threshold}"
+            style="
+              top: ${spot.topPct}%;
+              ${posStyle}
+              --base-rot: ${spot.rot}deg;
+              --initial-rot: ${spot.rot - 22}deg;
+              --target-opacity: ${spot.opacity};
+            "
+            class="bg-bloom-branch absolute w-24 h-28 sm:w-32 sm:h-36 pointer-events-none"
+          >
+            <svg viewBox="0 0 110 160" class="w-full h-full overflow-visible" style="transform: ${flipScale} scale(${spot.scale});">
+              <use href="#akaar-botanical-branch" />
+            </svg>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Unified 60fps Scroll Choreography (Works on both Home Page & Workshop Product Page)
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
+    let tickingScroll = false;
+
+    function updateScrollChoreography() {
+      const currentY = window.scrollY;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pageProgress = Math.max(0, Math.min(1, currentY / maxScroll));
+
+      const delta = currentY - lastScrollY;
+      scrollVelocity = Math.max(-22, Math.min(22, delta * 0.4));
+      lastScrollY = currentY;
+
+      // 1. Update Top Progress Bar
+      const topBar = document.getElementById('top-scroll-progress-bar');
+      if (topBar) topBar.style.width = `${(pageProgress * 100).toFixed(1)}%`;
+
+      // 2. Scrub Original Delicate Red Line (#scroll-clay-thread) from 1400 -> 0
+      const clayThread = document.getElementById('scroll-clay-thread');
+      if (clayThread) {
+        const dashOffset = 1400 - pageProgress * 1400;
+        clayThread.style.strokeDashoffset = `${dashOffset.toFixed(1)}`;
+      }
+
+      // 3. Bloom the 12 Subtle Green Branches in the background
+      const swayDeg = (Math.sin(currentY * 0.014) * 3.2 + scrollVelocity * 0.25).toFixed(2);
+      document.querySelectorAll('.bg-bloom-branch').forEach(branch => {
+        const threshold = parseFloat(branch.dataset.bloomThreshold || '0.2');
+        if (pageProgress + 0.08 >= threshold) {
+          branch.classList.add('bloomed');
+          branch.style.setProperty('--sway-offset', `${swayDeg}deg`);
+        } else {
+          branch.classList.remove('bloomed');
+        }
+      });
+
+      // 4. Corner Leaves & Mini Header Emblem Rotation
+      const leafTR = document.getElementById('decor-leaf-tr');
+      const leafBL = document.getElementById('decor-leaf-bl');
+      if (leafTR) leafTR.style.transform = `rotate(${swayDeg}deg)`;
+      if (leafBL) leafBL.style.transform = `rotate(${-swayDeg}deg)`;
+
+      const miniLogo = document.getElementById('nav-mini-logo');
+      if (miniLogo) miniLogo.style.transform = `rotate(${(currentY * 0.12).toFixed(1)}deg)`;
+
+      const vh = window.innerHeight;
+
+      // 5. Home Page Per-Card Vertical Scroll Choreography
+      document.querySelectorAll('.workshop-card').forEach((card, idx) => {
+        const rect = card.getBoundingClientRect();
+        if (rect.bottom < -120 || rect.top > vh + 120) return;
+
+        const rawProgress = (vh - rect.top) / (vh + rect.height);
+        const cardProgress = Math.max(0, Math.min(1, rawProgress));
+
+        const cardCenter = rect.top + rect.height / 2;
+        const distFromCenterRatio = (cardCenter - vh / 2) / (vh * 0.65);
+        const clampedCenterRatio = Math.max(-1, Math.min(1, distFromCenterRatio));
+        const focusStrength = 1 - Math.min(1, Math.abs(clampedCenterRatio));
+
+        const panY = clampedCenterRatio * -22;
+        card.style.setProperty('--img-pan-y', `${panY.toFixed(1)}px`);
+
+        const directionSign = idx % 2 === 0 ? 1 : -1;
+        const maskTilt = clampedCenterRatio * 2.8 * directionSign;
+        const maskScale = 0.94 + focusStrength * 0.08;
+        card.style.setProperty('--mask-tilt', `${maskTilt.toFixed(2)}deg`);
+        card.style.setProperty('--mask-scale', maskScale.toFixed(3));
+
+        const blobShiftY = clampedCenterRatio * 12;
+        const blobRot = -2 * directionSign + (cardProgress - 0.5) * 10;
+        card.style.setProperty('--blob-shift-y', `${blobShiftY.toFixed(1)}px`);
+        card.style.setProperty('--blob-rot', `${blobRot.toFixed(1)}deg`);
+
+        const stampRot = cardProgress * 240;
+        card.style.setProperty('--stamp-rot', `${stampRot.toFixed(1)}deg`);
+
+        const meter = card.querySelector('.card-scroll-meter');
+        if (meter) meter.style.width = `${(cardProgress * 100).toFixed(0)}%`;
+
+        if (focusStrength > 0.52) {
+          card.classList.add('is-active-card');
+        } else {
+          card.classList.remove('is-active-card');
+        }
+      });
+
+      // 6. Product Page Subtle Scroll Animations (Hero Stamp + Detail Cards)
+      const productStamp = document.getElementById('product-hero-stamp');
+      if (productStamp) {
+        productStamp.style.transform = `rotate(${(currentY * 0.18).toFixed(1)}deg)`;
+      }
+
+      document.querySelectorAll('.product-scroll-card').forEach((card, idx) => {
+        const rect = card.getBoundingClientRect();
+        if (rect.bottom < -80 || rect.top > vh + 80) return;
+
+        const cardCenter = rect.top + rect.height / 2;
+        const ratio = Math.max(-1, Math.min(1, (cardCenter - vh / 2) / (vh * 0.6)));
+        const focus = 1 - Math.abs(ratio);
+        const dir = idx % 2 === 0 ? 1 : -1;
+
+        const tilt = ratio * 1.1 * dir;
+        const shiftY = ratio * 10;
+        const scale = 0.98 + focus * 0.02;
+
+        card.style.setProperty('--detail-tilt', `${tilt.toFixed(2)}deg`);
+        card.style.setProperty('--detail-y', `${shiftY.toFixed(1)}px`);
+        card.style.setProperty('--detail-scale', scale.toFixed(3));
+
+        if (focus > 0.45) {
+          card.classList.add('is-focused-detail');
+        } else {
+          card.classList.remove('is-focused-detail');
+        }
+      });
+
+      tickingScroll = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!tickingScroll) {
+        window.requestAnimationFrame(updateScrollChoreography);
+        tickingScroll = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      requestAnimationFrame(() => {
+        setupBackgroundScrollLineAndBranches();
+        updateScrollChoreography();
+      });
+    });
+
+    function handleHeroLogoParallax(e) {
+      const wrapper = document.getElementById('hero-logo-interactive');
+      const rect = wrapper.getBoundingClientRect();
+      const rx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ry = (e.clientY - rect.top) / rect.height - 0.5;
+
+      const blob = document.getElementById('logo-blob-layer');
+      const crescent = document.getElementById('logo-crescent-layer');
+      const pot = document.getElementById('logo-pot-layer');
+
+      if (blob && crescent && pot) {
+        blob.style.transform = `translate(${rx * 9}px, ${ry * 7}px)`;
+        crescent.style.transform = `translate(${-rx * 8}px, ${-ry * 6}px) rotate(${rx * 6}deg)`;
+        pot.style.transform = `translate(${rx * 4}px, ${ry * 4}px) rotate(${-rx * 4}deg)`;
+      }
+    }
+
+    function resetHeroLogoParallax() {
+      ['logo-blob-layer', 'logo-crescent-layer', 'logo-pot-layer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.transform = '';
+      });
+    }
+
+    function toggleIGSimulator() {
+      document.body.classList.toggle('ig-webview-simulator');
+      const isIG = document.body.classList.contains('ig-webview-simulator');
+      const label = document.getElementById('ig-simulator-label');
+      if (label) {
+        label.textContent = isIG ? 'Exit IG Frame' : 'IG Mobile View';
+      }
+      requestAnimationFrame(() => {
+        setupBackgroundScrollLineAndBranches();
+        updateScrollChoreography();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupBackgroundScrollLineAndBranches();
+      populateProductPageContent(workshopsData[0]);
+      renderAllWorkshopViews();
+    });
+  </script>
+</body>
+</html>
