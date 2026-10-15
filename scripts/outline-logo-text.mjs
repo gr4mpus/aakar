@@ -10,8 +10,9 @@ const font = (pkg, file) => {
   return opentype.parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
 };
 
-const sans = font('josefin-sans', 'josefin-sans-latin-400-normal.woff');
-const sansMed = font('josefin-sans', 'josefin-sans-latin-600-normal.woff');
+// Brand pairing: Plus Jakarta Sans + Cormorant Garamond (same as the site UI).
+const sans = font('plus-jakarta-sans', 'plus-jakarta-sans-latin-500-normal.woff');
+const sansMed = font('plus-jakarta-sans', 'plus-jakarta-sans-latin-600-normal.woff');
 const serif = font('cormorant-garamond', 'cormorant-garamond-latin-600-normal.woff');
 
 const VIEW_W = 500;
@@ -158,9 +159,9 @@ const dest = new URL('../src/components/Logo/glyphs.ts', import.meta.url);
 writeFileSync(dest, out);
 console.log(`glyphs.ts written (${out.length} bytes)`);
 
-// ---- Handwritten hero note (Caveat), one kerned path per line ----
-const script = font('caveat', 'caveat-latin-600-normal.woff');
-const SCRIPT_SIZE = 40;
+// ---- Hero note in Cormorant Garamond italic, one kerned path per line ----
+const script = font('cormorant-garamond', 'cormorant-garamond-latin-600-italic.woff');
+const SCRIPT_SIZE = 38;
 const LEAD = 44;
 const scriptLines = ['Shape it.', 'Personalize it.', 'Make it yours.'].map((text, i) => {
   const baseline = 34 + i * LEAD;

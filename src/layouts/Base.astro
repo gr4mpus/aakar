@@ -71,15 +71,11 @@ const jakartaFace = `@font-face{font-family:'Plus Jakarta Sans Variable';font-st
   .shell {
     position: relative;
     z-index: 1;
+    /* `clip`, never `hidden`: hidden turns the shell into its own vertical
+       scroll box, and iOS then rubber-bands it back up while you scroll. */
     overflow-x: clip;
   }
-  /* Phones never use sticky inside the shell, so the universally supported
-     `hidden` can be used there. */
-  @media (max-width: 899px) {
-    .shell {
-      overflow-x: hidden;
-    }
-  }
+
   /* Page-to-page morphs on desktop only; phones get a plain, instant navigation. */
   @media (hover: hover) and (pointer: fine) {
     @view-transition {
