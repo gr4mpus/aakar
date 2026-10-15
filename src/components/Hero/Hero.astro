@@ -58,7 +58,7 @@ import Icon from '../Icon.astro';
     position: absolute;
     top: 0;
     left: 0;
-    width: clamp(120px, 34cqw, 300px);
+    width: clamp(120px, 34vw, 300px);
     opacity: 0.38;
     overflow: visible;
     pointer-events: none;
@@ -81,7 +81,7 @@ import Icon from '../Icon.astro';
     position: absolute;
     top: -6px;
     right: -10px;
-    width: clamp(70px, 18cqw, 150px);
+    width: clamp(70px, 18vw, 150px);
     color: var(--olive);
     opacity: 0.38;
     transform: rotate(-150deg) scaleX(-1);
@@ -106,14 +106,14 @@ import Icon from '../Icon.astro';
     width: 100%;
   }
   .hero__logo {
-    width: min(74cqw, 380px);
+    width: min(74vw, 380px);
   }
   .hero__note {
-    width: min(58cqw, 230px);
+    width: min(58vw, 230px);
     margin-top: 6px;
     transform: rotate(-3deg);
   }
-  @container (min-width: 760px) {
+  @media (min-width: 760px) {
     .hero__note {
       position: absolute;
       left: calc(50% + 210px);
@@ -131,7 +131,7 @@ import Icon from '../Icon.astro';
   }
   .hero__display {
     display: block;
-    font: 600 clamp(2.6rem, 16cqw, 7.4rem) / 0.92 var(--serif);
+    font: 600 clamp(2.6rem, 16vw, 7.4rem) / 0.92 var(--serif);
     letter-spacing: 0.01em;
     text-transform: uppercase;
     color: var(--terracotta);
@@ -154,7 +154,7 @@ import Icon from '../Icon.astro';
 
   .hero__rule {
     position: relative;
-    width: min(86cqw, 560px);
+    width: min(86vw, 560px);
     height: 12px;
     margin: 18px 0 6px;
   }
@@ -219,7 +219,7 @@ import Icon from '../Icon.astro';
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font: 700 clamp(1rem, 4.6cqw, 1.35rem) / 1 var(--sans);
+    font: 700 clamp(1rem, 4.6vw, 1.35rem) / 1 var(--sans);
     letter-spacing: 0.01em;
   }
   .brush-banner .icon {
@@ -237,7 +237,7 @@ import Icon from '../Icon.astro';
     align-items: center;
     gap: 12px;
     margin: 26px 0 0;
-    font: 700 clamp(1rem, 4.4cqw, 1.2rem) / 1.25 var(--sans);
+    font: 700 clamp(1rem, 4.4vw, 1.2rem) / 1.25 var(--sans);
     color: var(--ink);
   }
   .hero__slot .icon {

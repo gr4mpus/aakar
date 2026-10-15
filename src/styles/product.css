@@ -54,7 +54,7 @@
   grid-template-columns: minmax(0, 1fr); /* see .ws-grid: WebKit growth guard */
   gap: 28px;
 }
-@container (min-width: 900px) {
+@media (min-width: 900px) {
   .pdp-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 56px;
@@ -70,9 +70,16 @@
 .gallery__stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 9 / 11;
-  max-height: 72svh;
+  /* explicit height on phones (no aspect-ratio — see WorkshopCard) */
+  height: min(calc((100vw - 2 * var(--gutter)) * 1.22), 72svh);
   margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .gallery__stage {
+    height: auto;
+    aspect-ratio: 9 / 11;
+    max-height: 72svh;
+  }
 }
 .gallery__blob {
   position: absolute;
@@ -257,7 +264,7 @@
 }
 .info__title {
   margin: 14px 0 0;
-  font: 600 clamp(2.5rem, 11cqw, 4rem) / 0.98 var(--serif);
+  font: 600 clamp(2.5rem, 11vw, 4rem) / 0.98 var(--serif);
   letter-spacing: -0.01em;
   animation: fade-up 0.8s var(--ease-out) both;
 }
@@ -560,7 +567,7 @@
   color: var(--olive);
   text-align: center;
 }
-@container (min-width: 520px) {
+@media (min-width: 520px) {
   .book {
     padding: 24px;
   }
@@ -576,7 +583,7 @@
   gap: 18px;
   margin-top: 56px;
 }
-@container (min-width: 760px) {
+@media (min-width: 760px) {
   .story {
     grid-template-columns: 1fr 1fr;
     gap: 22px;
@@ -675,7 +682,7 @@
   margin-top: 3px;
   color: var(--terracotta);
 }
-@container (min-width: 760px) {
+@media (min-width: 760px) {
   .policy {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -726,7 +733,7 @@
   flex: none;
   min-height: 44px;
 }
-@container (min-width: 900px) {
+@media (min-width: 900px) {
   .dock {
     display: none;
   }

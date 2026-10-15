@@ -24,7 +24,6 @@ const tones = ['clay', 'olive', 'peach'];
     max-width: 920px;
     margin: 72px auto 0;
     padding: 0 var(--gutter);
-    container-type: inline-size;
   }
   .promises__box {
     display: flex;
@@ -79,7 +78,7 @@ const tones = ['clay', 'olive', 'peach'];
     text-transform: uppercase;
   }
   /* Desktop: classic three-column badges with vertical dotted dividers */
-  @container (min-width: 641px) {
+  @media (min-width: 700px) {
     .promises__box {
       flex-direction: row;
       padding: 22px 10px;

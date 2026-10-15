@@ -97,9 +97,10 @@ const photo = w.photos[0];
 
   /* Organic clay-mask photo */
   .ws-photo {
+    /* 4:3 via padding (not aspect-ratio): immune to WebKit's grow-on-relayout bug */
     position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 3;
+    height: 0;
+    padding-top: 75%;
     margin: 4px 4px 0;
   }
   .ws-photo__blob,
@@ -173,7 +174,7 @@ const photo = w.photos[0];
   }
   .ws-title {
     margin: 12px 0 0;
-    font: 600 clamp(1.7rem, 7cqw, 2.2rem) / 1.02 var(--serif);
+    font: 600 clamp(1.7rem, 7vw, 2.2rem) / 1.02 var(--serif);
   }
   .ws-link {
     text-decoration: none;
