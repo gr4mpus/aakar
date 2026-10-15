@@ -19,10 +19,10 @@ const branches = Array.from({ length: 12 }, (_, i) => {
       pathLength="1"
       d="M50,0 C68,180 32,360 54,540 C72,720 30,860 50,1000"></path>
   </svg>
-  <!-- Mobile: a brush stroke that paints itself down the left gutter. -->
-  <div class="rail" data-progress>
-    <span class="rail__stroke"></span>
-    <span class="rail__drip"></span>
+  <!-- Phones: two soft clay glows that drift slowly with scroll. -->
+  <div class="wash" data-progress>
+    <span class="wash__a"></span>
+    <span class="wash__b"></span>
   </div>
   <div class="branches">
     {
@@ -70,52 +70,39 @@ const branches = Array.from({ length: 12 }, (_, i) => {
     inset: 0;
   }
 
-  /* ----- Mobile scroll accent (the centre thread hides behind cards on phones).
-     Left side, because the browser's scrollbar lives on the right. ----- */
-  .rail {
-    --rail-h: calc(100svh - 110px);
-    position: fixed;
-    top: 84px;
-    left: 5px;
-    z-index: 25;
-    width: 6px;
-    height: var(--rail-h);
-    pointer-events: none;
-    /* Hidden at the top so the hero stays clean; eases in once scrolling starts. */
-    opacity: min(0.75, calc(var(--p, 0) * 25));
-    transition: opacity 0.5s;
-  }
-  .rail__stroke {
-    /* tapered like a loaded brush: thin and faint at the start, full at the tip */
-    position: absolute;
-    left: 2px;
-    top: 0;
-    width: 2.5px;
-    height: 100%;
-    border-radius: 3px;
-    background: linear-gradient(rgb(226 140 31 / 0), var(--ochre) 18%, var(--terracotta));
-    transform-origin: 50% 0;
-    transform: scaleY(var(--p, 0));
-  }
-  .rail__drip {
-    /* a soft drop of wet slip at the end of the stroke */
-    position: absolute;
-    left: 0.5px;
-    top: -5px;
-    width: 5.5px;
-    height: 8px;
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-    background: var(--terracotta);
-    transform: translateY(calc(var(--p, 0) * var(--rail-h)));
-  }
-  @media (min-width: 760px) {
-    .rail {
-      display: none;
-    }
+  /* ----- Phones: the thread hides behind cards, so instead two soft clay
+     glows drift a little as you scroll. Gradients only (no blur filter), and
+     only transform changes, so it costs almost nothing. ----- */
+  .wash {
+    display: none;
   }
   @media (max-width: 759px) {
     .thread {
       display: none;
+    }
+    .wash {
+      display: block;
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+    }
+    .wash span {
+      position: absolute;
+      width: 120vw;
+      height: 120vw;
+      border-radius: 50%;
+    }
+    .wash__a {
+      top: -30vw;
+      right: -55vw;
+      background: radial-gradient(closest-side, rgb(226 140 31 / 0.16), transparent);
+      transform: translate3d(calc(var(--p, 0) * -40vw), calc(var(--p, 0) * 70vh), 0);
+    }
+    .wash__b {
+      bottom: -40vw;
+      left: -60vw;
+      background: radial-gradient(closest-side, rgb(169 53 24 / 0.11), transparent);
+      transform: translate3d(calc(var(--p, 0) * 35vw), calc(var(--p, 0) * -60vh), 0);
     }
   }
   .branch {
