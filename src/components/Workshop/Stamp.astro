@@ -12,8 +12,10 @@ const { id, text, center, class: className } = Astro.props;
 <span class:list={['stamp', className]} aria-hidden="true">
   <svg viewBox="0 0 100 100">
     <defs><path id={`st-${id}`} d="M50 50m-35 0a35 35 0 1 1 70 0a35 35 0 1 1-70 0"></path></defs>
-    <circle cx="50" cy="50" r="46" class="stamp__ring"></circle>
-    <text><textPath href={`#st-${id}`} textLength="218">{text}</textPath></text>
+    <g class="stamp__spin">
+      <circle cx="50" cy="50" r="46" class="stamp__ring"></circle>
+      <text><textPath href={`#st-${id}`} textLength="218">{text}</textPath></text>
+    </g>
   </svg>
   <b>{center}</b>
 </span>
@@ -31,6 +33,12 @@ const { id, text, center, class: className } = Astro.props;
     inset: 0;
     width: 100%;
     height: 100%;
+  }
+  /* Rotating inside the SVG keeps the element's box fixed — rotating the box
+     itself made iOS re-zoom the page every scroll frame. */
+  .stamp__spin {
+    transform-box: view-box;
+    transform-origin: 50px 50px;
     transform: rotate(calc(var(--py, 0) * 160deg));
   }
   .stamp__ring {

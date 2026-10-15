@@ -86,7 +86,8 @@
   overflow: hidden;
   border-radius: 999px 999px 40px 40px / 520px 520px 40px 40px;
   background: var(--sand-deep);
-  transform: translateZ(0);
+  isolation: isolate;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 .gallery__track {
   display: flex;

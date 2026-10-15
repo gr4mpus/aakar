@@ -19,10 +19,10 @@ const branches = Array.from({ length: 12 }, (_, i) => {
       pathLength="1"
       d="M50,0 C68,180 32,360 54,540 C72,720 30,860 50,1000"></path>
   </svg>
-  <!-- Mobile: a fine clay thread in the right gutter, with a bead at its tip. -->
+  <!-- Mobile: a brush stroke that paints itself down the left gutter. -->
   <div class="rail" data-progress>
-    <span class="rail__fill"></span>
-    <span class="rail__bead"></span>
+    <span class="rail__stroke"></span>
+    <span class="rail__drip"></span>
   </div>
   <div class="branches">
     {
@@ -70,51 +70,42 @@ const branches = Array.from({ length: 12 }, (_, i) => {
     inset: 0;
   }
 
-  /* ----- Mobile scroll rail (the centre thread hides behind cards on phones) ----- */
+  /* ----- Mobile scroll accent (the centre thread hides behind cards on phones).
+     Left side, because the browser's scrollbar lives on the right. ----- */
   .rail {
-    --rail-h: calc(100svh - 104px);
+    --rail-h: calc(100svh - 110px);
     position: fixed;
-    top: 80px;
-    right: 3px;
+    top: 84px;
+    left: 5px;
     z-index: 25;
-    width: 9px;
+    width: 6px;
     height: var(--rail-h);
-    /* Invisible at the very top so the hero stays clean; eases in on scroll. */
-    opacity: min(0.85, calc(var(--p, 0) * 30));
-    transition: opacity 0.4s;
+    pointer-events: none;
+    /* Hidden at the top so the hero stays clean; eases in once scrolling starts. */
+    opacity: min(0.75, calc(var(--p, 0) * 25));
+    transition: opacity 0.5s;
   }
-  .rail::before {
-    /* dotted guide */
-    content: '';
+  .rail__stroke {
+    /* tapered like a loaded brush: thin and faint at the start, full at the tip */
     position: absolute;
-    left: 4px;
+    left: 2px;
     top: 0;
-    bottom: 0;
-    width: 1px;
-    background: repeating-linear-gradient(to bottom, rgb(169 53 24 / 0.35) 0 2px, transparent 2px 7px);
-  }
-  .rail__fill {
-    position: absolute;
-    left: 3.5px;
-    top: 0;
-    width: 2px;
+    width: 2.5px;
     height: 100%;
-    border-radius: 2px;
-    background: linear-gradient(var(--ochre), var(--terracotta));
+    border-radius: 3px;
+    background: linear-gradient(rgb(226 140 31 / 0), var(--ochre) 18%, var(--terracotta));
     transform-origin: 50% 0;
     transform: scaleY(var(--p, 0));
   }
-  .rail__bead {
+  .rail__drip {
+    /* a soft drop of wet slip at the end of the stroke */
     position: absolute;
-    left: 0;
-    top: -4px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--ochre);
-    box-shadow:
-      0 0 0 2px var(--cream),
-      0 0 0 3px var(--terracotta);
+    left: 0.5px;
+    top: -5px;
+    width: 5.5px;
+    height: 8px;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    background: var(--terracotta);
     transform: translateY(calc(var(--p, 0) * var(--rail-h)));
   }
   @media (min-width: 760px) {

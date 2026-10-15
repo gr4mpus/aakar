@@ -119,7 +119,9 @@ const photo = w.photos[0];
   .ws-photo__frame {
     overflow: hidden;
     background: var(--sand-deep);
-    transform: translateZ(0);
+    /* WebKit drops rounded clipping on moving children without this. */
+    isolation: isolate;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
   }
   .ws-photo__frame img {
     width: 100%;

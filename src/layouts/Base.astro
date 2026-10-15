@@ -72,9 +72,13 @@ const jakartaFace = `@font-face{font-family:'Plus Jakarta Sans Variable';font-st
     position: relative;
     z-index: 1;
     container-type: inline-size;
+    overflow-x: clip;
   }
-  @view-transition {
-    navigation: auto;
+  /* Page-to-page morphs on desktop only; phones get a plain, instant navigation. */
+  @media (hover: hover) and (pointer: fine) {
+    @view-transition {
+      navigation: auto;
+    }
   }
   ::view-transition-old(root),
   ::view-transition-new(root) {
