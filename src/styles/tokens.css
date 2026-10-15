@@ -40,8 +40,10 @@
 }
 html {
   -webkit-text-size-adjust: 100%;
-  /* iOS shrinks the page to fit anything wider than the screen — never allow it. */
-  overflow-x: clip;
+  /* iOS shrinks the page to fit anything wider than the screen — never allow it.
+     `hidden` (not `clip`) so older iPhones honour it too; set on <html> only so
+     the viewport stays the scroller and sticky elements keep working. */
+  overflow-x: hidden;
   scroll-behavior: smooth;
   scroll-padding-top: 76px;
 }
@@ -53,8 +55,8 @@ body {
   background: var(--cream);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: clip;
   position: relative;
+  width: 100%;
 }
 /* Zero-byte paper grain on desktop only — on phones the extra repaint isn't worth it. */
 @media (hover: hover) and (pointer: fine) {

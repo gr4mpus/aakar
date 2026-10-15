@@ -74,6 +74,13 @@ const jakartaFace = `@font-face{font-family:'Plus Jakarta Sans Variable';font-st
     container-type: inline-size;
     overflow-x: clip;
   }
+  /* Phones never use sticky inside the shell, so the universally supported
+     `hidden` can be used there. */
+  @media (max-width: 899px) {
+    .shell {
+      overflow-x: hidden;
+    }
+  }
   /* Page-to-page morphs on desktop only; phones get a plain, instant navigation. */
   @media (hover: hover) and (pointer: fine) {
     @view-transition {

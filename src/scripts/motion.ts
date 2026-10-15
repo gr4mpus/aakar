@@ -5,6 +5,8 @@
 //   --py   element offset from centre  → visible [data-parallax] (-1…1)
 const root = document.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Per-element parallax only on desktop; phones scroll with nothing recomputed per frame.
+const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 // ---- Reveal-once on enter ----
 const revealer = new IntersectionObserver(
@@ -29,7 +31,7 @@ const tracker = new IntersectionObserver((entries) => {
   for (const e of entries) e.isIntersecting ? visible.add(e.target as HTMLElement) : visible.delete(e.target as HTMLElement);
   queue();
 });
-if (!reduce) document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => tracker.observe(el));
+if (!reduce && fine) document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => tracker.observe(el));
 
 let raf = 0;
 function frame() {
@@ -43,7 +45,7 @@ function frame() {
 
   const p = max > 0 ? Math.min(1, Math.max(0, y / max)).toFixed(4) : '0';
   for (const el of progressEls) el.style.setProperty('--p', p);
-  if (hero && !reduce) hero.style.setProperty('--lift', Math.min(1, y / heroH).toFixed(3));
+  if (hero && !reduce && fine) hero.style.setProperty('--lift', Math.min(1, y / heroH).toFixed(3));
   for (const [el, r] of rects) el.style.setProperty('--py', ((r.top + r.height / 2 - vh / 2) / vh).toFixed(3));
 }
 const queue = () => {
