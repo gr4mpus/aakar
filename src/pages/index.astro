@@ -217,6 +217,9 @@ const jsonLd = [
   }
   .ws-grid {
     display: grid;
+    /* Explicit, shrinkable column: an implicit `auto` track let WebKit grow the
+       aspect-ratio photos on every scroll (they ballooned past 1000px on iOS). */
+    grid-template-columns: minmax(0, 1fr);
     gap: 22px;
     max-width: 1100px;
     margin: 0 auto;
@@ -236,7 +239,7 @@ const jsonLd = [
   }
   @container (min-width: 760px) {
     .ws-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       column-gap: 34px;
       row-gap: 40px;
       padding-bottom: 80px;

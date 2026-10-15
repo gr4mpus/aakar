@@ -51,6 +51,7 @@
 
 .pdp-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* see .ws-grid: WebKit growth guard */
   gap: 28px;
 }
 @container (min-width: 900px) {
@@ -68,6 +69,7 @@
 /* ---------- Gallery ---------- */
 .gallery__stage {
   position: relative;
+  width: 100%;
   aspect-ratio: 9 / 11;
   max-height: 72svh;
   margin: 0 auto;
@@ -570,6 +572,7 @@
 /* ---------- Story cards ---------- */
 .story {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   margin-top: 56px;
 }
